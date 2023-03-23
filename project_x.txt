@@ -20,3 +20,4 @@ Cafeteria project : Create an live menu and payment system (a.k.a console progra
     waiting time for the food to be served
 [ ] Add an option to add tips (% from the full cost) to the final bill.
 [ ] After the payment , system should generate the receipt (logging).
+[ ] In github write README.md file
