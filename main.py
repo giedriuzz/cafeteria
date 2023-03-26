@@ -9,16 +9,17 @@ class TableReservation:
                      'table_number':()
                      }
     
-    def check_person_name_for_reservation(self):
-        customer_name=input('Please provide you full name: ')
+    def check_person_name_for_reservation(self)-> None:
+        customer_name=input('Please provide you full name for check reservation: ')
+        self.check_table_availibility()
+        table_assign = f"We assigned for you '{self.customer_data['table_name']}' table and number is '{self.customer_data['table_number']}'"
+        
         if customer_name in self.reservation_maked_persons[::]:
-            self.check_table_availibility()
-            print(f"You name '{customer_name}' is on the reservation list. We assigned for you '{self.customer_data['table_name']}' table and number is '{self.customer_data['table_number']}'")
+            print(f"You name '{customer_name}' is on the reservation list. {table_assign} ")               
         else:
             self.customer_data['customer'] = customer_name
-            self.check_table_availibility()
-            print(f"We assigned for you '{self.customer_data['table_name']}' table and number is '{self.customer_data['table_number']}'")
-            # print('We assigned for you table:', *[table for table in self.check_table_availibility()])
+            print(f"You have not reserved a table. {table_assign}")
+            
     
     def check_table_availibility(self) -> None: 
         type_of_tables: dict = {"single": [1, 2, 3],
@@ -48,4 +49,3 @@ def main():
 
 
 main()      
-    
