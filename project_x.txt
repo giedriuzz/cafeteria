@@ -22,3 +22,18 @@ Cafeteria project : Create an live menu and payment system (a.k.a console progra
 [] After the payment , system should generate the receipt (logging).
 
 [] In github write README.md file
+
+[x]Please enter your name: Arturas
+[x]Please enter your surname: Ardzijauskas
+[x]Welcome Arturas, Ardzijauskas to our restaurant
+[x]Current time is: 19:59:03
+You do not have a reservation
+Please enter the number of guests: 2
+Please enter time for reservation: 16
+Arturas, Ardzijauskas your table is: 5 reserved at 16 o'clock
+    
+    
+   
+    
+  
+  

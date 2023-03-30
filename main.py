@@ -3,7 +3,7 @@ import random
 class TableReservation:
     
     
-    reservation_maked_persons = []
+    reservation_maked_persons = {}
     customer_data = {'customer': [],
                      'table_name':(),
                      'table_number':()
@@ -81,7 +81,7 @@ class TableReservation:
       
 def main():
     
-    TableReservation.reservation_maked_persons=["Giedrius Kuprys", "Darius Kazimieras"]
+    TableReservation.reservation_maked_persons={"Giedrius Kuprys": ['single', 1], "Darius Kazimieras": ['double', 4]}
     print(TableReservation.reservation_maked_persons)
     
     check_table = TableReservation()
