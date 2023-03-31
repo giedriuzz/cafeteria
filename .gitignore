@@ -128,5 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Project blue print
-project_x.txt
+# My files
+tests.ipynb
