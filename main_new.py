@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import time
 from typing import Optional
+import logging
 
 class TableReservationAbstract(ABC):
     
@@ -43,8 +44,37 @@ class TableReservation(TableReservationAbstract):
         assigned_time = time.strftime('%A %B %d  %H:%m:%S', self.get_time())
         return assigned_time
     
-    def tables(self) -> None:  # FIXME: None?
-        pass
+    def tables(self, table_name: str='', table_number: int=1, table_occupancy: bool=True) -> None:  # FIXME: None?
+        self.table_name = table_name
+        self.table_number = table_number
+        self.table_occupancy = table_occupancy
+        self.tables_data = {
+            'single':{
+                1:True,
+                2:True,
+                3:True
+            },
+            'double':{
+                1:True,
+                2:True,
+                3:True
+            },
+            'family':{
+                1:True,
+                2:True,
+                3:True
+            }
+        }
+
+        # table = {'table':
+        #           {
+        #               1:True,
+        #               2: False
+        #               3: True
+        #           }
+        #          }
+
+        self.tables_data[self.table_name].update({self.table_number: self.table_occupancy})
     
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
@@ -52,10 +82,13 @@ class TableReservation(TableReservationAbstract):
         
         return reservation_data
 
+
 customer_name = input('Please input you name: ')
-customer_surname = input('Please input you surname: ')   
+customer_surname = input('Please input you surname: ')
 customer = TableReservation(name=customer_name, surname=customer_surname)
 
+print(customer.tables(table_name='single', table_number=1, table_occupancy=False))
+print(customer.tables_data)
 print(customer.greeting_customer())
 print(customer.assigned_time())
 print(customer.final_reservation())
