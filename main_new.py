@@ -48,40 +48,31 @@ class TableReservation(TableReservationAbstract):
         assigned_time = time.strftime('%A %B %d  %H:%m:%S', self.get_time())
         return assigned_time
     
-    def tables(self, table_name: str=' ', table_number: int=1, table_occupancy: bool=True) -> None:  # FIXME: None?
+    def tables(self, table_name: str=' ', table_number: int=1, table_occupied: bool=True) -> None:  # FIXME: None?
         self.table_name = table_name
         self.table_number = table_number
-        self.table_occupancy = table_occupancy
+        self.table_occupied = table_occupied
         self.tables_data = {
             'single':{
-                1:{
-                    occupancy: True,
-                }
-                2:True,
-                3:True
-            },
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                },
             'double':{
-                1:True,
-                2:True,
-                3:True
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
             },
             'family':{
-                1:True,
-                2:True,
-                3:True
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
             }
         }
         
         logger.debug(f'tables() table_name={table_name}')
-        # table = {'table':
-        #           {
-        #               1:True,
-        #               2: False
-        #               3: True
-        #           }
-        #          }
-
-        self.tables_data[self.table_name].update({self.table_number: self.table_occupancy})
+   
+        self.tables_data[self.table_name].update({self.table_number:{'occupied': self.table_occupied}})
     
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
@@ -93,12 +84,13 @@ class TableReservation(TableReservationAbstract):
 customer_name = input('Please input you name: ')
 customer_surname = input('Please input you surname: ')
 customer = TableReservation(name=customer_name, surname=customer_surname)
-customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupancy=True)
+customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
 
 
 print(customer.greeting_customer())
 print(customer.assigned_time())
 print(customer.final_reservation())
+print(customer.tables_data)
 
     
     
