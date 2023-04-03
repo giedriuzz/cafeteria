@@ -1,99 +1,99 @@
-import random
+from abc import ABC, abstractmethod
+import time
+from typing import Optional
+import logging
+import logging.config
 
-class TableReservation:
+logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
+logger = logging.getLogger('sLogger')
+
+class TableReservationAbstract(ABC):
+    
+    @abstractmethod
+    def customer_full_name(self, name: str, surname: str) -> str:
+        pass
+    
+    @abstractmethod
+    def get_time(self) -> None:  # FIXME: None?
+        pass
+    
+    @abstractmethod
+    def tables(self) -> None:  # FIXME: None?
+        pass
+    
+    @abstractmethod
+    def final_reservation(self) -> None:  # FIXME: None?
+        pass
     
     
-    reservation_maked_persons = {}
-    customer_data = {'customer': [],
-                     'table_name':(),
-                     'table_number':()
-                     }
-    occupied_tables = {}
-    free_tables = {}
-     
-    def get_table_for_customer(self, persons_amount: int) -> None:  # TODO: type anotation
-        self.persons_amount = persons_amount
-        appologise = f'Sorry we don`t have free table for you'  # You can wait? After some seconds ask again for reservation?
-        if int(self.persons_amount) > 2:
-            if not self.free_tables.get('family'):
-                print(appologise)
-            if len(self.free_tables.get('family')) != 0:
-                return self.free_tables.get('family')
-            
-        if int(self.persons_amount) == 2:
-            if not self.free_tables['double']:
-                print(appologise)
-            if len(self.free_tables['double']) != 0:
-                return self.free_tables.get('double')
-            if not self.free_tables['family']:
-                print(appologise)
-            if len(self.free_tables.get('family')) != 0:
-                return self.free_tables.get('family')
-            
-        if persons_amount == 1:
-            if not self.free_tables.get('single'):
-                pass # FIXME:
-            
-            if len(self.free_tables.get('double')) != 0:
-                return self.free_tables.get('double')
-            if len(self.free_tables.get('family')) != 0:
-                return self.free_tables.get('family')
-            else:
-                print(appologise)
-            
-                
+class TableReservation(TableReservationAbstract):
     
-    def check_person_name_for_reservation(self, customer_name: str)-> None:
-        self.customer_name = customer_name
+    def __init__(self, name: str, surname: str) -> None:
+        self.name = name
+        self.surname = surname
         
-        self.generate_occupied_tables()
-        table_name_random: str = random.choice(list(self.free_tables.keys()))  # Return random number of len dict.keys()
-        table_random_number = random.choice(self.free_tables.get(table_name_random))
-        
-        table_assign = f"We assigned for you '{table_name_random}' table and number is '{table_random_number}'"
-        
-        if customer_name in self.reservation_maked_persons[::]:
-            print(f"You name '{customer_name}' is on the reservation list. {table_assign} ")               
-        else:
-            self.customer_data['customer'] = customer_name
-            print(f"You have not reserved a table. {table_assign}")
-            
+    def customer_full_name(self) -> str:
+        full_name = self.name + ' ' + self.surname
+        return full_name
     
-    def generate_occupied_tables(self): 
-        
-        type_of_tables: dict = {"single": [1, 2, 3],
-                      "double": [4, 5, 6],
-                      'family': [7, 8, 9]
-                      }
-        table_name_random = random.randint(0, len(list(type_of_tables.keys())))  # Return random number of len dict.keys()
-        occupied_tables_list = list(type_of_tables.keys())[:(table_name_random)]
-        
-        for table_keys in type_of_tables.keys():
-            table_number_random = random.randint(0, len(list(type_of_tables.values())))
-            if table_keys in occupied_tables_list:
-                number_of_occupied_tables = type_of_tables.get(table_keys)
-                self.occupied_tables.update({table_keys: number_of_occupied_tables[:(table_number_random)]})
-                if table_number_random < 3: # TODO: condition must to be from values lenght!
-                    self.free_tables[table_keys] = number_of_occupied_tables[(table_number_random) - len(type_of_tables.values()): ]
-            elif table_keys not in occupied_tables_list:
-                self.free_tables.update({table_keys: type_of_tables.get(table_keys)})
-        
-      
-def main():
+    def greeting_customer(self):
+        return f'Welcome to our restoran "Casablanca" {self.customer_full_name()}'
     
-    TableReservation.reservation_maked_persons={"Giedrius Kuprys": ['single', 1], "Darius Kazimieras": ['double', 4]}
-    print(TableReservation.reservation_maked_persons)
+    @staticmethod
+    def get_time():  # FIXME: -> None? Also need for generate time on recipe
+        time_now = time.localtime()
+        return time_now
     
-    check_table = TableReservation()
-    # Table reservation
-    check_table.generate_occupied_tables()
-    print(check_table.free_tables)  # DEL:
-    customer = input('Please provide you full name for check reservation: ')
-    perssons_amount = input('Good, for how many perssons need a table? ')
-    print(check_table.get_table_for_customer(perssons_amount))
-    #check_table.check_person_name_for_reservation(customer)
+    def assigned_time(self):
+        assigned_time = time.strftime('%A %B %d  %H:%m:%S', self.get_time())
+        return assigned_time
     
-   
+    def tables(self, table_name: str=' ', table_number: int=1, table_occupied: bool=True) -> None:  # FIXME: None?
+        self.table_name = table_name
+        self.table_number = table_number
+        self.table_occupied = table_occupied
+        self.tables_data = {
+            'single':{
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                },
+            'double':{
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+            },
+            'family':{
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+            }
+        }
+        
+        logger.debug(f'tables() table_name={table_name}')
+
+        self.tables_data[self.table_name].update({self.table_number:{'occupied': self.table_occupied}})
+    
+    def final_reservation(self):  # FIXME -> None? Assign table and other data
+        reservation_data = []
+        reservation_data.append(self.customer_full_name())
+        
+        return reservation_data
 
 
-main()      
+customer_name = input('Please input you name: ')
+customer_surname = input('Please input you surname: ')
+customer = TableReservation(name=customer_name, surname=customer_surname)
+customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
+
+
+print(customer.greeting_customer())
+print(customer.assigned_time())
+print(customer.final_reservation())
+print(customer.tables_data)
+
+    
+    
+
+    
+    
