@@ -71,7 +71,7 @@ class TableReservation(TableReservationAbstract):
         }
         
         logger.debug(f'tables() table_name={table_name}')
-   
+
         self.tables_data[self.table_name].update({self.table_number:{'occupied': self.table_occupied}})
     
     def final_reservation(self):  # FIXME -> None? Assign table and other data
