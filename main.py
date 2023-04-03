@@ -48,10 +48,19 @@ class TableReservation(TableReservationAbstract):
         assigned_time = time.strftime('%A %B %d  %H:%m:%S', self.get_time())
         return assigned_time
     
-    def tables(self, table_name: str=' ', table_number: int=1, table_occupied: bool=True) -> None:  # FIXME: None?
+    def tables(
+        self, table_name: str=' ',
+        table_number: int=1,
+        table_occupied: bool = False,
+        table_custtomers: str = ' ',
+        table_occupied_time: str = ' '
+        ) -> dict:  # FIXME: None?
+
         self.table_name = table_name
         self.table_number = table_number
         self.table_occupied = table_occupied
+        self.table_custtomers = table_custtomers
+        self.table_occupied_time = table_occupied_time
         self.tables_data = {
             'single':{
                 1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
@@ -70,9 +79,22 @@ class TableReservation(TableReservationAbstract):
             }
         }
         
-        logger.debug(f'tables() table_name={table_name}')
+        logger.debug(f'tables() table_name={table_name}')  # DEL
 
-        self.tables_data[self.table_name].update({self.table_number:{'occupied': self.table_occupied}})
+        self.tables_data[self.table_name].update(
+            {
+                self.table_number:{
+                    'occupied': self.table_occupied,
+                    'custtomers': self.table_custtomers,
+                    'occupied_time': self.table_occupied_time
+                    }
+                }
+            )
+        return self.tables_data
+    
+    def assign_table(self):
+        if self.customer_full_name is not self.tables_data.get(''):
+            print('Yes')
     
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
@@ -83,9 +105,11 @@ class TableReservation(TableReservationAbstract):
 
 customer_name = input('Please input you name: ')
 customer_surname = input('Please input you surname: ')
+# customer_reservation_time = input('What time would you like to reserve a table?')  # FIXME string?
+# customer_perssons_quantity = input('How many people will be with you?')
+
 customer = TableReservation(name=customer_name, surname=customer_surname)
 customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
-
 
 print(customer.greeting_customer())
 print(customer.assigned_time())
