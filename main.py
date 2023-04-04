@@ -37,7 +37,7 @@ class TableReservation(TableReservationAbstract):
         return full_name
     
     def greeting_customer(self):
-        return f'Welcome to our restoran "Casablanca" {self.customer_full_name()}'
+        return f'{self.customer_full_name()}, welcome to our restoran "Casablanca" '
     
     @staticmethod
     def get_time():  # FIXME: -> None? Also need for generate time on recipe
@@ -93,8 +93,9 @@ class TableReservation(TableReservationAbstract):
         return self.tables_data
     
     def assign_table(self):
-        if self.customer_full_name is not self.tables_data.get(''):
-            print('Yes')
+        for n in range(1, len(self.tables_data.get('single', {}).values()) + 1):
+            if self.customer_full_name is not self.tables_data.get('single', {}).get(n, {}).get('custtomers', {}):
+                print('Yes')
     
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
@@ -113,8 +114,8 @@ customer_reseved_table = customer.tables(table_name='single', table_number=1, ta
 
 print(customer.greeting_customer())
 print(customer.assigned_time())
-print(customer.final_reservation())
-print(customer.tables_data)
+# print(customer.final_reservation())
+# print(customer.tables_data)
 
     
     
