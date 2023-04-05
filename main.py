@@ -18,16 +18,30 @@ class TableReservationAbstract(ABC):
         pass
     
     @abstractmethod
-    def tables(self) -> None:  # FIXME: None?
-        pass
-    
-    @abstractmethod
     def final_reservation(self) -> None:  # FIXME: None?
         pass
     
     
 class TableReservation(TableReservationAbstract):
     
+    tables_data = {
+            'single':{
+                1:{'occupied': False, 'custtomers': ['aa aa'], 'occupied_time': [10, 12, 14, 16, 18, 20, 22]},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                },
+            'double':{
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+            },
+            'family':{
+                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+            }
+        }
+
     def __init__(self, name: str, surname: str) -> None:
         self.name = name
         self.surname = surname
@@ -48,55 +62,22 @@ class TableReservation(TableReservationAbstract):
         assigned_time = time.strftime('%A %B %d  %H:%m:%S', self.get_time())
         return assigned_time
     
-    def tables(
-        self, table_name: str='single',
-        table_number: int=1,
-        table_occupied: bool = False,
-        table_custtomers: str = ' ',
-        table_occupied_time: str = ' '
-        ) -> dict:  # FIXME: None?
-
-        self.table_name = table_name
-        self.table_number = table_number
-        self.table_occupied = table_occupied
-        self.table_custtomers = table_custtomers
-        self.table_occupied_time = table_occupied_time
-        self.tables_data = {
-            'single':{
-                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                },
-            'double':{
-                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-            },
-            'family':{
-                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-            }
-        }
+    def add_customer(self): # FIXME what of type anotation?
         
-        logger.debug(f'tables() table_name={table_name}')  # DEL
+        #full_name = self.customer_full_name()
+        for key in self.tables_data.keys():
+            for n in range(1, len(self.tables_data.get(key, {}).values()) + 1):  # vietoj 'single' prasukti ciklą su kitais staliukais
+                if len(occupied_time := self.tables_data.get(key, {}).get(n, {}).get('occupied_time', {})) < 8:
+                    print(len(occupied_time))
+                    self.tables_data[key][n]['custtomers'].append(self.customer_full_name())
 
-        self.tables_data[self.table_name].update(
-            {
-                self.table_number:{
-                    'occupied': self.table_occupied,
-                    'custtomers': self.table_custtomers,
-                    'occupied_time': self.table_occupied_time
-                    }
-                }
-            )
         return self.tables_data
-    
+
     def check_table(self):
         for key in self.tables_data.keys():
             for n in range(1, len(self.tables_data.get(key, {}).values()) + 1):  # vietoj 'single' prasukti ciklą su kitais staliukais
                 if self.customer_full_name() in self.tables_data.get(key, {}).get(n, {}).get('custtomers', {}):
-                    index_of_name: list = self.tables_data.get('single', {}).get(n, {}).get('custtomers', {})
+                    index_of_name: list = self.tables_data.get(key, {}).get(n, {}).get('custtomers', {})
                     print(index_of_name.index(self.customer_full_name()))
                 else:
                     print('Nėra')
@@ -114,14 +95,14 @@ customer_surname = input('Please input you surname: ')
 # customer_perssons_quantity = input('How many people will be with you?')
 
 customer = TableReservation(name=customer_name, surname=customer_surname)
-customer.tables(table_custtomers='Giedrius Kuprys')
-customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
 
+print(customer.add_customer())
 print(customer.greeting_customer())
 print(customer.assigned_time())
-print(customer.check_table())
+
+
 # print(customer.final_reservation())
-print(customer.tables_data)
+#print(TableReservation.tables_data)
 
     
     
