@@ -49,7 +49,7 @@ class TableReservation(TableReservationAbstract):
         return assigned_time
     
     def tables(
-        self, table_name: str=' ',
+        self, table_name: str='single',
         table_number: int=1,
         table_occupied: bool = False,
         table_custtomers: str = ' ',
@@ -92,11 +92,15 @@ class TableReservation(TableReservationAbstract):
             )
         return self.tables_data
     
-    def assign_table(self):
-        for n in range(1, len(self.tables_data.get('single', {}).values()) + 1):
-            if self.customer_full_name is not self.tables_data.get('single', {}).get(n, {}).get('custtomers', {}):
-                print('Yes')
-    
+    def check_table(self):
+        for key in self.tables_data.keys():
+            for n in range(1, len(self.tables_data.get(key, {}).values()) + 1):  # vietoj 'single' prasukti ciklą su kitais staliukais
+                if self.customer_full_name() in self.tables_data.get(key, {}).get(n, {}).get('custtomers', {}):
+                    index_of_name: list = self.tables_data.get('single', {}).get(n, {}).get('custtomers', {})
+                    print(index_of_name.index(self.customer_full_name()))
+                else:
+                    print('Nėra')
+
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
         reservation_data.append(self.customer_full_name())
@@ -110,12 +114,14 @@ customer_surname = input('Please input you surname: ')
 # customer_perssons_quantity = input('How many people will be with you?')
 
 customer = TableReservation(name=customer_name, surname=customer_surname)
+customer.tables(table_custtomers='Giedrius Kuprys')
 customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
 
 print(customer.greeting_customer())
 print(customer.assigned_time())
+print(customer.check_table())
 # print(customer.final_reservation())
-# print(customer.tables_data)
+print(customer.tables_data)
 
     
     
