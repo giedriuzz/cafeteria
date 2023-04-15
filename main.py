@@ -10,10 +10,6 @@ logger = logging.getLogger('sLogger')
 class TableReservationAbstract(ABC):
     
     @abstractmethod
-    def customer_full_name(self, name: str, surname: str) -> str:
-        pass
-    
-    @abstractmethod
     def get_time(self) -> None:  # FIXME: None?
         pass
     
@@ -27,17 +23,48 @@ class TableReservationAbstract(ABC):
     
     
 class TableReservation(TableReservationAbstract):
-    
-    def __init__(self, name: str, surname: str) -> None:
-        self.name = name
-        self.surname = surname
-        
-    def customer_full_name(self) -> str:
-        full_name = self.name + ' ' + self.surname
-        return full_name
+    list_of_reserved_customers = ['G G']
+    tables_data = {
+            'single':{
+                1:{'occupied': False, 'customers': [], 'occupied_time': []},
+                2:{'occupied': False, 'customers': [], 'occupied_time': []},
+                3:{'occupied': False, 'customers': [], 'occupied_time': []},
+                },
+            'double':{
+                1:{'occupied': False, 'customers': [], 'occupied_time': []},
+                2:{'occupied': False, 'customers': [], 'occupied_time': []},
+                3:{'occupied': False, 'customers': [], 'occupied_time': []},
+            },
+            'family':{
+                1:{'occupied': False, 'customers': [], 'occupied_time': []},
+                2:{'occupied': False, 'customers': [], 'occupied_time': []},
+                3:{'occupied': False, 'customers': [], 'occupied_time': []},
+            }
+        }
+
+    def __init__(self, full_name: str) -> None:
+        self.full_name = full_name
     
     def greeting_customer(self):
-        return f'Welcome to our restoran "Casablanca" {self.customer_full_name()}'
+        return f'Welcome to our restaurant "Casablanca" {self.full_name}'
+
+    def check_customer(self) -> bool:  # Check are a customer in list list_of_reserved_customers=[]
+        if self.full_name in self.list_of_reserved_customers:
+            return True
+        else:
+            return False
+    
+    def add_customer(self):  # TODO type anotations
+        return self.list_of_reserved_customers.append(self.full_name)
+
+    def add_reservation(self, reserved_time, persons_number):  # TODO užbaigti šią vietą
+        self.reserved_time = reserved_time
+        self.persons_number = persons_number
+        pass
+    
+    
+        
+
     
     @staticmethod
     def get_time():  # FIXME: -> None? Also need for generate time on recipe
@@ -52,30 +79,30 @@ class TableReservation(TableReservationAbstract):
         self, table_name: str=' ',
         table_number: int=1,
         table_occupied: bool = False,
-        table_custtomers: str = ' ',
+        table_customers: str = ' ',
         table_occupied_time: str = ' '
         ) -> dict:  # FIXME: None?
 
         self.table_name = table_name
         self.table_number = table_number
         self.table_occupied = table_occupied
-        self.table_custtomers = table_custtomers
+        self.table_customers = table_customers
         self.table_occupied_time = table_occupied_time
         self.tables_data = {
             'single':{
-                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                1:{'occupied': False, 'customers': [], 'occupied_time': []},
+                2:{'occupied': False, 'customers': [], 'occupied_time': []},
+                3:{'occupied': False, 'customers': [], 'occupied_time': []},
                 },
             'double':{
-                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                1:{'occupied': False, 'customers': [], 'occupied_time': []},
+                2:{'occupied': False, 'customers': [], 'occupied_time': []},
+                3:{'occupied': False, 'customers': [], 'occupied_time': []},
             },
             'family':{
-                1:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                2:{'occupied': False, 'custtomers': [], 'occupied_time': []},
-                3:{'occupied': False, 'custtomers': [], 'occupied_time': []},
+                1:{'occupied': False, 'customers': [], 'occupied_time': []},
+                2:{'occupied': False, 'customers': [], 'occupied_time': []},
+                3:{'occupied': False, 'customers': [], 'occupied_time': []},
             }
         }
         
@@ -85,7 +112,7 @@ class TableReservation(TableReservationAbstract):
             {
                 self.table_number:{
                     'occupied': self.table_occupied,
-                    'custtomers': self.table_custtomers,
+                    'customers': self.table_customers,
                     'occupied_time': self.table_occupied_time
                     }
                 }
@@ -93,25 +120,27 @@ class TableReservation(TableReservationAbstract):
         return self.tables_data
     
     def assign_table(self):
-        if self.customer_full_name is not self.tables_data.get(''):
+        if self.full_name is not self.tables_data.get(''):
             print('Yes')
     
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
-        reservation_data.append(self.customer_full_name())
+        reservation_data.append(self.full_name)
         
         return reservation_data
 
 
-customer_name = input('Please input you name: ')
-customer_surname = input('Please input you surname: ')
+customer_full_name = input('Please provide your full name: ')
 # customer_reservation_time = input('What time would you like to reserve a table?')  # FIXME string?
-# customer_perssons_quantity = input('How many people will be with you?')
+# customer_persons_quantity = input('How many people will be with you?')
 
-customer = TableReservation(name=customer_name, surname=customer_surname)
-customer_reseved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
+customer = TableReservation(customer_full_name)
+print(customer.check_customer())
+customer_reserved_table = customer.tables(table_name='single', table_number=1, table_occupied=True)
 
-print(customer.greeting_customer())
+print(customer.greeting_customer())  # Pasisveikinimas
+if customer.check_customer() == False:
+    customer.add_customer()
 print(customer.assigned_time())
 print(customer.final_reservation())
 print(customer.tables_data)
