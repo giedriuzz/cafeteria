@@ -24,16 +24,52 @@ class TableReservationAbstract(ABC):
 
 
 class TableReservation(TableReservationAbstract):
-    def __init__(self, name: str, surname: str) -> None:
-        self.name = name
-        self.surname = surname
+    list_of_reserved_customers = ["G G"]
+    tables_data = {
+        "single": {
+            1: {"customers": []},
+            2: {"customers": []},
+            3: {"customers": []},
+        },
+        "double": {
+            1: {"customers": []},
+            2: {"customers": []},
+            3: {"customers": []},
+        },
+        "family": {
+            1: {"customers": [["Giedrius Kuprys", "16:45"]]},
+            2: {"customers": [["Tadas Blinda", "20:45"]]},
+            3: {"customers": []},
+        },
+    }
 
-    def customer_full_name(self) -> str:
-        full_name = self.name + " " + self.surname
-        return full_name
+    def __init__(
+        self, full_name: str, time_of_reservation: List[int], number_of_persons: int
+    ) -> None:
+        self.full_name = full_name
+        self.time_of_reservation = time_of_reservation
+        self.number_of_persons = number_of_persons
 
     def greeting_customer(self):
-        return f'Welcome to our restoran "Casablanca" {self.customer_full_name()}'
+        return f'Welcome to our restaurant "Casablanca" {self.full_name}'
+
+    def check_customer(
+        self,
+    ) -> bool:  # Check are a customer in list list_of_reserved_customers=[]
+        if self.full_name in self.list_of_reserved_customers:
+            return True
+        else:
+            return False
+
+    def add_customer(self) -> Optional[int]:  # TODO type annotations
+        pass
+
+    def add_reservation(
+        self, reserved_time, persons_quantity
+    ):  # TODO užbaigti šią vietą
+        self.reserved_time = reserved_time
+        self.persons_quantity = persons_quantity
+        pass
 
     @staticmethod
     def get_time():  # FIXME: -> None? Also need for generate time on recipe
@@ -49,24 +85,29 @@ class TableReservation(TableReservationAbstract):
         table_name: str = " ",
         table_number: int = 1,
         table_occupied: bool = False,
-        table_custtomers: str = " ",
+        table_customers: str = " ",
         table_occupied_time: str = " ",
-    ) -> dict:  # FIXME: None?
+    ) -> dict:  # FIXME: ištrinti?
         self.table_name = table_name
         self.table_number = table_number
         self.table_occupied = table_occupied
-        self.table_custtomers = table_custtomers
+        self.table_customers = table_customers
         self.table_occupied_time = table_occupied_time
         self.tables_data = {
             "single": {
-                1: {"occupied": False, "custtomers": [], "occupied_time": []},
-                2: {"occupied": False, "custtomers": [], "occupied_time": []},
-                3: {"occupied": False, "custtomers": [], "occupied_time": []},
+                1: {"occupied": False, "customers": [], "occupied_time": []},
+                2: {"occupied": False, "customers": [], "occupied_time": []},
+                3: {"occupied": False, "customers": [], "occupied_time": []},
             },
             "double": {
-                1: {"occupied": False, "custtomers": [], "occupied_time": []},
-                2: {"occupied": False, "custtomers": [], "occupied_time": []},
-                3: {"occupied": False, "custtomers": [], "occupied_time": []},
+                1: {"occupied": False, "customers": [], "occupied_time": []},
+                2: {"occupied": False, "customers": [], "occupied_time": []},
+                3: {"occupied": False, "customers": [], "occupied_time": []},
+            },
+            "family": {
+                1: {"occupied": False, "customers": [], "occupied_time": []},
+                2: {"occupied": False, "customers": [], "occupied_time": []},
+                3: {"occupied": False, "customers": [], "occupied_time": []},
             },
         }
 
@@ -76,7 +117,7 @@ class TableReservation(TableReservationAbstract):
             {
                 self.table_number: {
                     "occupied": self.table_occupied,
-                    "custtomers": self.table_custtomers,
+                    "customers": self.table_customers,
                     "occupied_time": self.table_occupied_time,
                 }
             }
@@ -84,8 +125,25 @@ class TableReservation(TableReservationAbstract):
         return self.tables_data
 
     def assign_table(self):
-        if self.customer_full_name is not self.tables_data.get(""):
+        if self.full_name is not self.tables_data.get(""):
             print("Yes")
+
+    def check_table_availability(self) -> int:
+        """Patikrinti ar yra laisvų staliukų
+            kiek bus svečių?
+            pagal svečių kiekį imamas staliukas ar staliukai ir tikrinama
+        gražiname staliuko pavadinimą su primtinu klientui vietų skaičiumi"""
+        (number_of_persons_for_check := self.number_of_persons)
+        if number_of_persons_for_check >= 3:
+            # tikrinami 'family' staliuka.index(value)
+            for x in self.tables_data["family"]:
+                if len(self.tables_data["family"].get(x).get("customers")) >= 1:
+                    continue
+                return x
+
+        if number_of_persons_for_check >= 1:
+            # tikrinami visi staliukai 'single', 'double', 'family'
+            pass
 
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
@@ -95,19 +153,21 @@ class TableReservation(TableReservationAbstract):
 
 
 reservation_ahead = TableReservation(
-    full_name="Giedrius Kuprys", time_of_reservation=[16, 30], number_of_persons=2
+    full_name="Giedrius Kuprys", time_of_reservation=[16, 30], number_of_persons=3
 )
 print(reservation_ahead.greeting_customer())
 customer_full_name = input("Please provide your full name: ")
 # customer_reservation_time = input('What time would you like to reserve a table?')  # FIXME string?
-# customer_perssons_quantity = input('How many people will be with you?')
+# customer_persons_quantity = input('How many people will be with you?')
 
-customer = TableReservation(name=customer_name, surname=customer_surname)
-customer_reseved_table = customer.tables(
-    table_name="single", table_number=1, table_occupied=True
-)
 
-print(customer.greeting_customer())
-print(customer.assigned_time())
-print(customer.final_reservation())
-print(customer.tables_data)
+print(reservation_ahead.check_customer())
+print(reservation_ahead.check_table_availability())
+
+print(reservation_ahead.greeting_customer())
+if reservation_ahead.check_customer() == False:
+    reservation_ahead.add_customer()
+print(reservation_ahead.assigned_time())
+print(reservation_ahead.final_reservation())
+print(reservation_ahead.list_of_reserved_customers)
+print(reservation_ahead.tables_data)
