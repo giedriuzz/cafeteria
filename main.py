@@ -14,7 +14,6 @@ class TableReservationAbstract(ABC):
     def get_time(self) -> None:  # FIXME: None?
         pass
 
-
     @abstractmethod
     def final_reservation(self) -> None:  # FIXME: None?
         pass
@@ -42,16 +41,19 @@ class TableReservation(TableReservationAbstract):
     }
 
     def __init__(
-        self, full_name: str="") -> None:  # TODO time reservation type annotation change to vise versa List
+        self, full_name: str = ""
+    ) -> None:  # TODO time reservation type annotation change to vise versa List
         self.full_name = full_name
 
-
-    def ahead_reservation(self, full_name_ahead: str, time_of_reservation_ahead: str, number_of_persons_ahead: int):
+    def ahead_reservation(
+        self,
+        full_name_ahead: str,
+        time_of_reservation_ahead: str,
+        number_of_persons_ahead: int,
+    ):
         self.full_name_ahead = full_name_ahead
         self.time_of_reservation_ahead = time_of_reservation_ahead
         self.number_of_persons_ahead = number_of_persons_ahead
-
-        pass
 
     def greeting_customer(self) -> str:
         return f'Welcome to our restaurant "Casablanca" {self.full_name}'
@@ -83,15 +85,68 @@ class TableReservation(TableReservationAbstract):
         assigned_time = time.strftime("%A %B %d  %H:%m:%S", self.get_time())
         return assigned_time
 
-    def free_table(self) -> None:  # [x] done
+    def get_free_tables_list(self) -> None:  # [x] done
         for i, x in self.tables_data.items():
             for z in x:
                 if len(*self.tables_data[i].get(z).values()) == 0:
                     self.free_tables_list.append([i, z])
 
-    def assign_table(self):
-        if self.full_name is not self.tables_data.get(""):
-            print("Yes")
+    def assign_table(
+        self,
+        full_name_ahead: str,
+        time_of_reservation_ahead: str,
+        number_of_persons_ahead: int,
+    ) -> None:
+        self.full_name_ahead = full_name_ahead
+        self.time_of_reservation_ahead = time_of_reservation_ahead
+        self.number_of_persons_ahead = number_of_persons_ahead
+
+        if not self.free_tables_list:
+            return f"Sorry, restaurant is full"
+
+        if self.number_of_persons_ahead >= 3:
+            for table in self.free_tables_list:
+                if table[0] == "family":
+                    return self.tables_data[table[0]][table[1]].update(
+                        {
+                            "customers": [
+                                self.full_name_ahead,
+                                self.time_of_reservation_ahead,
+                                self.number_of_persons_ahead,
+                            ]
+                        }
+                    )
+                else:
+                    return f"Sorry we don`t have a table for you"
+
+        if self.number_of_persons_ahead >= 2:
+            for table in self.free_tables_list:
+                if table[0] == "double" or table[0] == "family":
+                    return self.tables_data[table[0]][table[1]].update(
+                        {
+                            "customers": [
+                                self.full_name_ahead,
+                                self.time_of_reservation_ahead,
+                                self.number_of_persons_ahead,
+                            ]
+                        }
+                    )
+                else:
+                    return f"Sorry we don`t have a table for you"
+        if self.number_of_persons_ahead >= 1:
+            for table in self.free_tables_list:
+                if table[0] == "single" or table[0] == "double" or table[0] == "family":
+                    return self.tables_data[table[0]][table[1]].update(
+                        {
+                            "customers": [
+                                self.full_name_ahead,
+                                self.time_of_reservation_ahead,
+                                self.number_of_persons_ahead,
+                            ]
+                        }
+                    )
+                else:
+                    return f"Sorry we don`t have a table for you"
 
     def check_table_availability(self) -> int:
         """Patikrinti ar yra laisvų staliukų
@@ -100,7 +155,6 @@ class TableReservation(TableReservationAbstract):
         gražiname staliuko pavadinimą su primtinu klientui vietų skaičiumi.."""
         pass
 
-
     def final_reservation(self):  # FIXME -> None? Assign table and other data
         reservation_data = []
         reservation_data.append(self.full_name)
@@ -108,15 +162,24 @@ class TableReservation(TableReservationAbstract):
         return reservation_data
 
 
-reservation_ahead = TableReservation().ahead_reservation(full_name_ahead='Giedrius Kuprys', time_of_reservation_ahead='10:00', number_of_persons_ahead=3)
+reservation_ahead = TableReservation()
+print(
+    reservation_ahead.ahead_reservation(
+        full_name_ahead="Giedrius Kuprys",
+        time_of_reservation_ahead="10:00",
+        number_of_persons_ahead=3,
+    )
+)
 
 table = TableReservation()
 
 customer_full_name = input("Please provide your full name: ")
 # customer_reservation_time = input('What time would you like to reserve a table?')  # FIXME string?
 # customer_persons_quantity = input('How many people will be with you?')
-table.free_table()
+table.get_free_tables_list()
 print(table.free_tables_list)
+print(table.assign_table())
+print(table.tables_data)
 
 # print(new_reservation.check_customer())
 
