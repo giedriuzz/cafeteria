@@ -24,9 +24,9 @@ class TableReservationAbstract(ABC):
 class Customer:
     """class for adding new customers."""
 
-    full_name: str
-    reservation_time: str  # TODO galbūt kitas tipas
-    qnt_of_persons: int
+    full_name: str = ""
+    reservation_time: str = ""  # TODO galbūt kitas tipas
+    qnt_of_persons: int = 0
 
 
 @dataclass
@@ -46,10 +46,53 @@ class CustomerTableReservation:
 
     def add_table_to_list(self, *table_to_list: CafeteriaTables) -> None:
         """Add tables to tables_data list.
-        Provide list of Objects to input.
+        Provide list of Objects for input.
         """
         for table in table_to_list:
             self.tables_data.append(table)
+
+    def get_table_for_customer(self, customer: Customer) -> Optional[str]:  # TODO
+        family_tables = (
+            z
+            for z in self.tables_data
+            if z.table_name == "Family"
+            if len(z.table_customer) == 0
+        )
+        double_tables = (
+            z
+            for z in self.tables_data
+            if z.table_name == "Double"
+            if len(z.table_customer) == 0
+        )
+        single_tables = (
+            z
+            for z in self.tables_data
+            if z.table_name == "Single"
+            if len(z.table_customer) == 0
+        )
+        for table in family_tables:
+            if not table.table_customer and customer.qnt_of_persons >= 3:
+                return table.table_customer.append(customer)
+            else:
+                print("we dont have free table")
+
+        for table_1, table_2 in zip(double_tables, family_tables, strict=False):
+            if not table_1.table_customer and customer.qnt_of_persons >= 2:
+                return table_1.table_customer.append(customer)
+            if not table_2.table_customer and customer.qnt_of_persons >= 2:
+                return table_2.table_customer.append(customer)
+            else:
+                print("we dont have free table")
+
+        # if (
+        #     customer.qnt_of_persons >= 2
+        #     and name.table_name == "Double"
+        #     or name.table_name == "Family"
+        #     and len(name.table_customer) == 0
+        # ):
+        #     name.table_customer.append(customer)
+        #     return f'You get table "{name.table_name}" number is "{name.table_number}" and reservation time is {customer.reservation_time}'
+        # print(f"Sorry we don`t have a table for you")
 
 
 class TableReservation(TableReservationAbstract):
@@ -195,17 +238,8 @@ class TableReservation(TableReservationAbstract):
         return reservation_data
 
 
-reservation_ahead = TableReservation()
-print(
-    reservation_ahead.ahead_reservation(
-        full_name_ahead="Giedrius Kuprys",
-        time_of_reservation_ahead="10:00",
-        number_of_persons_ahead=3,
-    )
-)
-
-table_1 = CafeteriaTables(table_name="Single", table_number=1, table_customer=[])
-table_2 = CafeteriaTables(table_name="Single", table_number=2, table_customer=[])
+table_1 = CafeteriaTables(table_name="Single", table_number=1, table_customer=[1])
+table_2 = CafeteriaTables(table_name="Single", table_number=2, table_customer=[1])
 table_3 = CafeteriaTables(table_name="Single", table_number=3, table_customer=[])
 table_4 = CafeteriaTables(table_name="Double", table_number=1, table_customer=[])
 table_5 = CafeteriaTables(table_name="Double", table_number=2, table_customer=[])
@@ -214,32 +248,7 @@ table_7 = CafeteriaTables(table_name="Family", table_number=1, table_customer=[]
 table_8 = CafeteriaTables(table_name="Family", table_number=2, table_customer=[])
 table_9 = CafeteriaTables(table_name="Family", table_number=3, table_customer=[])
 
-tables_to_list = CustomerTableReservation(
-    [
-        table_1,
-        table_2,
-        table_3,
-        table_4,
-        table_5,
-        table_6,
-        table_7,
-        table_8,
-        table_9,
-    ]
-)
 add_table = CustomerTableReservation()
-
-# add_table.tables_data += [
-#     table_1,
-#     table_2,
-#     table_3,
-#     table_4,
-#     table_5,
-#     table_6,
-#     table_7,
-#     table_8,
-#     table_9,
-# ]
 
 add_table.add_table_to_list(
     table_1,
@@ -252,6 +261,14 @@ add_table.add_table_to_list(
     table_8,
     table_9,
 )
+
+customer = Customer()
+customer_1 = Customer(
+    full_name="Tadas Blinda", reservation_time="13:00", qnt_of_persons=2
+)
+
+print(add_table.get_table_for_customer(customer_1))
+
 print(add_table.tables_data)
 customer_full_name = input("Please provide your full name: ")
 # customer_reservation_time = input('What time would you like to reserve a table?')  # FIXME string?
