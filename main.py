@@ -52,37 +52,27 @@ class CustomerTableReservation:
             self.tables_data.append(table)
 
     def get_table_for_customer(self, customer: Customer) -> Optional[str]:  # TODO
-        family_tables = (
-            z
-            for z in self.tables_data
-            if z.table_name == "Family"
-            if len(z.table_customer) == 0
-        )
-        double_tables = (
-            z
-            for z in self.tables_data
-            if z.table_name == "Double"
-            if len(z.table_customer) == 0
-        )
-        single_tables = (
-            z
-            for z in self.tables_data
-            if z.table_name == "Single"
-            if len(z.table_customer) == 0
-        )
-        for table in family_tables:
-            if not table.table_customer and customer.qnt_of_persons >= 3:
-                return table.table_customer.append(customer)
-            else:
-                print("we dont have free table")
+        free_tables = (
+            z for z in self.tables_data if not z.table_customer
+        )  # get all free tables
 
-        for table_1, table_2 in zip(double_tables, family_tables, strict=False):
-            if not table_1.table_customer and customer.qnt_of_persons >= 2:
-                return table_1.table_customer.append(customer)
-            if not table_2.table_customer and customer.qnt_of_persons >= 2:
-                return table_2.table_customer.append(customer)
-            else:
-                print("we dont have free table")
+        if customer.qnt_of_persons >= 3:
+            family_table = [
+                index
+                for index, item in enumerate(free_tables)
+                if item.table_name == "Family"
+            ]
+            return self.tables_data[family_table[0]].append(customer)
+
+            # if (
+            #     customer.qnt_of_persons > 2
+            #     and customer.qnt_of_persons < 3
+            #     and table.table_name == "Double"
+            #     or table.table_name == "Family"
+            # ):
+            #     return table.table_customer.append(customer)
+            # else:
+            print("we dont have free table")
 
         # if (
         #     customer.qnt_of_persons >= 2
@@ -264,13 +254,13 @@ add_table.add_table_to_list(
 
 customer = Customer()
 customer_1 = Customer(
-    full_name="Tadas Blinda", reservation_time="13:00", qnt_of_persons=2
+    full_name="Tadas Blinda", reservation_time="13:00", qnt_of_persons=3
 )
 
 print(add_table.get_table_for_customer(customer_1))
 
-print(add_table.tables_data)
-customer_full_name = input("Please provide your full name: ")
+print(*add_table.tables_data, end="\n")
+# customer_full_name = input("Please provide your full name: ")
 # customer_reservation_time = input('What time would you like to reserve a table?')  # FIXME string?
 # customer_persons_quantity = input('How many people will be with you?')
 
