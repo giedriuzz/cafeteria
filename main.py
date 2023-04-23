@@ -61,35 +61,31 @@ class CustomerTableReservation:
                 f'number is "{table.table_number}"'
                 f"and reservation time is {customer.reservation_time}"
             )
-            if customer.qnt_of_persons >= 3:
-                if not table.table_customer and table.table_name == "Family":
-                    self.tables_data[number].table_customer.append(customer)
-                    return reservation_msg
-                else:
-                    # trunk-ignore(ruff/F541)
-                    return f"We dont have free 'Family' tables"
-            if customer.qnt_of_persons >= 2 and customer.qnt_of_persons < 3:
-                if (
-                    not table.table_customer
-                    or table.table_name == "Double"
-                    or table.table_name == "Family"
-                ):
-                    self.tables_data[number].table_customer.append(customer)
-                    return reservation_msg
-                else:
-                    # trunk-ignore(ruff/F541)
-                    return f"We dont have free 'Double' or 'Family' tables"
-            if customer.qnt_of_persons >= 1:
-                if (
-                    not table.table_customer
-                    or table.table_name == "Single"
-                    or table.table_name == "Double"
-                    or table.table_name == "Family"
-                ):
-                    self.tables_data[number].table_customer.append(customer)
-                    return reservation_msg
-                else:
-                    return f"We dont have free tables"
+            if not table.table_customer:
+                if customer.qnt_of_persons >= 3:
+                    if table.table_name == "Family":
+                        self.tables_data[number].table_customer.append(customer)
+                        return reservation_msg
+                    else:
+                        # trunk-ignore(ruff/F541)
+                        return f"We dont have free 'Family' tables"
+                if customer.qnt_of_persons >= 2 and customer.qnt_of_persons < 3:
+                    if table.table_name == "Double" or table.table_name == "Family":
+                        self.tables_data[number].table_customer.append(customer)
+                        return reservation_msg
+                    else:
+                        # trunk-ignore(ruff/F541)
+                        return f"We dont have free 'Double' or 'Family' tables"
+                if customer.qnt_of_persons >= 1:
+                    if (
+                        table.table_name == "Single"
+                        or table.table_name == "Double"
+                        or table.table_name == "Family"
+                    ):
+                        self.tables_data[number].table_customer.append(customer)
+                        return reservation_msg
+                    else:
+                        return f"We dont have free tables"
 
         # print(f"Sorry we don`t have a table for you")
 
@@ -180,10 +176,10 @@ class TableReservation(TableReservationAbstract):
         return reservation_data
 
 
-table_1 = CafeteriaTables(table_name="Single", table_number=1, table_customer=[1])
+table_1 = CafeteriaTables(table_name="Single", table_number=1, table_customer=[])
 table_2 = CafeteriaTables(table_name="Single", table_number=2, table_customer=[1])
 table_3 = CafeteriaTables(table_name="Single", table_number=3, table_customer=[1])
-table_4 = CafeteriaTables(table_name="Double", table_number=1, table_customer=[])
+table_4 = CafeteriaTables(table_name="Double", table_number=1, table_customer=[1])
 table_5 = CafeteriaTables(table_name="Double", table_number=2, table_customer=[1])
 table_6 = CafeteriaTables(table_name="Double", table_number=3, table_customer=[1])
 table_7 = CafeteriaTables(table_name="Family", table_number=1, table_customer=[1])
@@ -206,7 +202,7 @@ add_table.add_table_to_list(
 
 customer = Customer()
 customer_1 = Customer(
-    full_name="Tadas Blinda", reservation_time="13:00", qnt_of_persons=1
+    full_name="Tadas Blinda", reservation_time="13:00", qnt_of_persons=3
 )
 
 print(add_table.get_table_for_customer(customer_1))
