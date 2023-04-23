@@ -52,10 +52,10 @@ class CustomerTableReservation:
             self.tables_data.append(table)
 
     def get_table_for_customer(self, customer: Customer) -> Optional[str]:
-        """Get table for customer if table is free"""
-        tables_generator = list(table for table in self.tables_data)
+        """Get table for customer if table is free."""
+        tables_data_gn = list(table for table in self.tables_data)
 
-        for number, table in enumerate(tables_generator):
+        for number, table in enumerate(tables_data_gn):
             reservation_msg: str = (
                 f'You get table "{table.table_name}"'
                 f'number is "{table.table_number}"'
@@ -66,6 +66,7 @@ class CustomerTableReservation:
                     self.tables_data[number].table_customer.append(customer)
                     return reservation_msg
                 else:
+                    # trunk-ignore(ruff/F541)
                     return f"We dont have free 'Family' tables"
             if customer.qnt_of_persons >= 2 and customer.qnt_of_persons < 3:
                 if (
@@ -76,6 +77,7 @@ class CustomerTableReservation:
                     self.tables_data[number].table_customer.append(customer)
                     return reservation_msg
                 else:
+                    # trunk-ignore(ruff/F541)
                     return f"We dont have free 'Double' or 'Family' tables"
             if customer.qnt_of_persons >= 1:
                 if (
