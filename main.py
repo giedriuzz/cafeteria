@@ -11,11 +11,7 @@ logger = logging.getLogger("sLogger")
 
 class TableReservationAbstract(ABC):
     @abstractmethod
-    def get_time(self) -> None:  # FIXME: None?
-        pass
-
-    @abstractmethod
-    def final_reservation(self) -> None:  # FIXME: None?
+    def get_time(self) -> tuple:
         pass
 
 
@@ -45,7 +41,7 @@ class CustomerTableReservation:
     temporary_customer_name = []
 
     @staticmethod
-    def get_time():
+    def get_time() -> tuple:
         time_now = time.localtime()
         return time_now
 
