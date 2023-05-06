@@ -1,4 +1,5 @@
 from main import CafeteriaTables, CustomerTableReservation, Customer
+import sys  #! #DEL only for debugging with launch.json argv
 
 # Configuration of tables
 table_1 = CafeteriaTables(table_name="Single", table_number=1, table_customer=[])
@@ -24,25 +25,40 @@ add_table.add_table_to_list(
     table_8,
     table_9,
 )
-reserve_table = CustomerTableReservation()
-customer = Customer()
-ahead_reservation_1 = Customer(
+
+
+ahead_reservation_customer_1 = Customer(
     full_name="Tadas Blinda", reservation_time="13", qnt_of_persons=3
 )
+add_table.get_table_for_customer(ahead_reservation_customer_1)
 
-add_table.get_table_for_customer(ahead_reservation_1)
-# print(add_table.tables_data)
+
 print("Hello !")
-customer_full_name = input("Please provide your full name: ")
-input_customer_name = Customer(full_name=customer_full_name)
-check_customer = add_table.check_customer_name(input_customer_name)
+# input_full_name = input("Please provide your full name: ")
+# customer_full_name = Customer(full_name=input_full_name)
+customer_full_name = Customer(full_name=sys.argv[0])
+check_customer = add_table.check_customer(customer_full_name)
+
 
 if check_customer is False:
     print("Sorry you don`t have a reservation, you can reserve now ")
-    reservation_time = input("In what time do you want to reserve a table? ")
-    qnt_of_customers = int(input("For how many people need a table? "))
-    reserve_table.make_reservation(
-        reservation_time=reservation_time, number_of_quests=qnt_of_customers
+    # reservation_time = input("In what time do you want to reserve a table? ")
+    # qnt_of_customers = int(input("For how many people need a table? "))
+    add_second_customer = Customer(
+        # full_name=input_full_name,
+        # reservation_time=reservation_time,
+        # qnt_of_persons=qnt_of_customers,
+        full_name=sys.argv[0],
+        reservation_time=sys.argv[1],
+        qnt_of_persons=int(sys.argv[2]),
     )
+
+    add_table.get_table_for_customer(add_second_customer)
+    print(add_table.tables_data)
 else:
-    print(check_customer)
+    print(
+        check_customer[1],
+        check_customer[2],
+        check_customer[3],
+        check_customer[4],
+    )

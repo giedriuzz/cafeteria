@@ -58,7 +58,7 @@ class CustomerTableReservation:
 
     def get_table_for_customer(self, customer: Customer) -> Optional[str]:
         """Get table for customer if table is free."""
-        tables_data_gn = list(table for table in self.tables_data)
+        tables_data_gn = (table for table in self.tables_data)
         for number, table in enumerate(tables_data_gn):
             reservation_msg = (
                 f"{customer.full_name}, you table is: {table.table_number} "
@@ -68,20 +68,21 @@ class CustomerTableReservation:
             if not table.table_customer:
 
                 def get_time_from_reservation():
-                    reserved_time = (t for t in table.table_customer)
-                    print(*reserved_time)
-                    self.tables_data[number].table_customer.append(customer)
+                    # reserved_time = (t for t in table.table_customer)
+                    # print(*reserved_time)
+                    # self.tables_data[number].table_customer.append(customer)
                     return reservation_msg
 
                 if customer.qnt_of_persons >= 3:
                     if table.table_name == "Family":
                         self.tables_data[number].table_customer.append(customer)
-                        return reservation_msg
+                        get_time_from_reservation()
+                        break
 
                 if customer.qnt_of_persons == 2:
                     if table.table_name == "Double" or table.table_name == "Family":
                         get_time_from_reservation()
-
+                        break
                 if customer.qnt_of_persons == 1:
                     if (
                         table.table_name == "Single"
@@ -89,38 +90,50 @@ class CustomerTableReservation:
                         or table.table_name == "Family"
                     ):
                         get_time_from_reservation()
-            continue
+                        break
+                continue
 
-        return f"Sorry we don`t have free tables for you"
+            return f"Sorry we don`t have free tables for you"
 
-    def check_customer_name(self, customer_name: Customer) -> Union[str, bool]:
-        print(f"Welcome to our restaurant , {customer_name.full_name}")
-        print(f"Current time is: {self.current_time()}")
-        self.temporary_customer_name.append(customer_name.full_name)
+    def check_customer(self, customer_name: Customer) -> bool | Optional[tuple]:
+        # print(
+        #     f"Welcome to our restaurant , {customer_name.full_name}"
+        # )  # ? DEL panaikinti
+        # print(f"Current time is: {self.current_time()}")  # ? DEL panaikinti
+        # self.temporary_customer_name.append(customer_name.full_name)
+        # find_customer = (z for z in self.tables_data if not z.table_customer)
         find_customer = (z for z in self.tables_data if z.table_customer)
-        for table in find_customer:
-            for name in table.table_customer:
-                if name.full_name == customer_name.full_name:
-                    self.temporary_customer_name.pop()
-                    return (
-                        f"{customer_name.full_name}, you table is: {table.table_number} "
-                        f"reserved at {name.reservation_time} o`clock "
-                    )
-
-            continue
-        else:
+        if not find_customer:
             return False
+        else:
+            for table in find_customer:
+                # print("table: ", table)
+                for name in table.table_customer:
+                    if name.full_name == customer_name.full_name:
+                        # self.temporary_customer_name.pop()
+                        # break
+                        return (
+                            True,
+                            table.table_name,
+                            table.table_number,
+                            name.full_name,
+                            name.reservation_time,
+                        )
+                    continue
 
-    def make_reservation(
-        self, reservation_time: str = " ", number_of_quests: int = 0
-    ) -> None:
-        customer = Customer(
-            full_name=self.temporary_customer_name[0],
-            reservation_time=reservation_time,
-            qnt_of_persons=int(number_of_quests),
-        )
-        self.temporary_customer_name.pop()
-        print(self.get_table_for_customer(customer))
+                    # return (
+                    #     f"{customer_name.full_name}, for you reserved '{table.table_name}' table number is '{table.table_number}' "
+                    #     f"reserved at {name.reservation_time} o`clock "
+                    # )
+
+    # def make_reservation(self, customer: Customer) -> str | None:
+    #     customer = Customer(
+    #         full_name=customer.full_name,
+    #         reservation_time=customer.reservation_time,
+    #         qnt_of_persons=int(customer.qnt_of_persons),
+    #     )
+    #     self.temporary_customer_name.pop()
+    #     return self.get_table_for_customer(customer)
 
 
 if __name__ == "__main__":
