@@ -97,19 +97,15 @@ class CustomerTableReservation:
             return f"Sorry we don`t have free tables for you"
 
     def check_customer(self, customer_name: Customer) -> bool | Optional[bool]:
-        # print(
-        #     f"Welcome to our restaurant , {customer_name.full_name}"
-        # )  # ? DEL panaikinti
-        # print(f"Current time is: {self.current_time()}")  # ? DEL panaikinti
-        # self.temporary_customer_name.append(customer_name.full_name)
-        # find_customer = (z for z in self.tables_data if not z.table_customer)
-        find_customer = (z for z in self.tables_data if z.table_customer)
-        if not find_customer:
-            return False
-        else:
-            for table in find_customer:
-                print("table: ", table)
+        """_exhausted  = object()
 
+        if next (some_generator, _exhausted) is _exhausted:
+            print ('empty generator')"""
+        _exhausted = object()
+        find_customer = (z for z in self.tables_data if z.table_customer)
+        if next(find_customer, _exhausted) is _exhausted:
+            print("generator empty")
+            for table in find_customer:
                 for name in table.table_customer:
                     if name.full_name == customer_name.full_name:
                         # self.temporary_customer_name.pop()
