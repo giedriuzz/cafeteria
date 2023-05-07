@@ -27,34 +27,32 @@ add_table.add_table_to_list(
 )
 
 
-ahead_reservation_customer_1 = Customer(
-    full_name="Tadas Blinda", reservation_time="13", qnt_of_persons=3
-)
-add_table.get_table_for_customer(ahead_reservation_customer_1)
+# ahead_reservation_customer_1 = Customer(
+#     full_name="Tadas Blinda", reservation_time="13", qnt_of_persons=3
+# )
+# add_table.get_table_for_customer(ahead_reservation_customer_1)
 
 
 print("Hello !")
-print("argv[0]", sys.argv[0], "argv[1]", sys.argv[1])
-# input_full_name = input("Please provide your full name: ")
-# customer_full_name = Customer(full_name=input_full_name)
-customer_full_name = Customer(full_name=sys.argv[0])
+
+input_full_name = input("Please provide your full name: ")
+customer_full_name = Customer(full_name=input_full_name)
 check_customer = add_table.check_customer(customer_full_name)
-print(check_customer)
+
 
 if check_customer is False:
     print("Sorry you don`t have a reservation, you can reserve now ")
-    # reservation_time = input("In what time do you want to reserve a table? ")
-    # qnt_of_customers = int(input("For how many people need a table? "))
+    reservation_time = input("In what time do you want to reserve a table? ")
+    qnt_of_customers = int(input("For how many people need a table? "))
     add_second_customer = Customer(
-        # full_name=input_full_name,
-        # reservation_time=reservation_time,
-        # qnt_of_persons=qnt_of_customers,
-        full_name=sys.argv[0],
-        reservation_time=sys.argv[1],
-        qnt_of_persons=int(sys.argv[2]),
+        full_name=input_full_name,
+        reservation_time=reservation_time,
+        qnt_of_persons=qnt_of_customers,
     )
 
-    add_table.get_table_for_customer(add_second_customer)
-    print(add_table.tables_data)
+    print(add_table.get_table_for_customer(add_second_customer))
+    # print(add_table.tables_data)
 else:
-    print(check_customer)
+    print(
+        f"{check_customer[0]}, you reserved before. You table number '{check_customer[1]}' and reservation time on {check_customer[2]} o`clock"  #! #type:ignore
+    )
