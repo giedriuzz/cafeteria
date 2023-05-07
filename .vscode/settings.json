@@ -7,5 +7,6 @@
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": false,
-    "python.linting.mypyEnabled": false
+    "python.linting.mypyEnabled": false,
+    "cmake.sourceDirectory": "/home/ufo/Documents/python_projects/cafeteria"
 }

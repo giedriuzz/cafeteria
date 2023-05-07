@@ -34,11 +34,12 @@ add_table.get_table_for_customer(ahead_reservation_customer_1)
 
 
 print("Hello !")
+print("argv[0]", sys.argv[0], "argv[1]", sys.argv[1])
 # input_full_name = input("Please provide your full name: ")
 # customer_full_name = Customer(full_name=input_full_name)
 customer_full_name = Customer(full_name=sys.argv[0])
 check_customer = add_table.check_customer(customer_full_name)
-
+print(check_customer)
 
 if check_customer is False:
     print("Sorry you don`t have a reservation, you can reserve now ")
@@ -56,9 +57,4 @@ if check_customer is False:
     add_table.get_table_for_customer(add_second_customer)
     print(add_table.tables_data)
 else:
-    print(
-        check_customer[1],
-        check_customer[2],
-        check_customer[3],
-        check_customer[4],
-    )
+    print(check_customer)
