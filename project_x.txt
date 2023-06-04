@@ -31,6 +31,14 @@ Cafeteria project : Create an live menu and payment system (a.k.a console progra
 [x]Please enter the number of guests: 2
 [x]Please enter time for reservation: 16
 [x]Arturas, Ardzijauskas your table is: 5 reserved at 16 o'clock
+
+Switching to MongoDb
+
+Database structure
+    [] customer: _id, customer_name: str, registration_date: datetime
+            [] realationship: customer_id: str, table_name: str, table_number: int, registration_time: datetime
+
+
     
     
    

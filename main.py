@@ -1,13 +1,37 @@
 import logging
 import logging.config
 import time
+from pymongo import MongoClient
+from typing import Dict, List, Any, Optional, Union
 from abc import ABC, abstractmethod
 from typing import List, Literal, Optional, Union
 from dataclasses import dataclass, field
+from connect.connect import ConnectToRpi4
 
 
 logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger("sLogger")
+
+
+class CafeteriaDataBase:
+    def __init__(
+        self,
+        base: ConnectToRpi4,
+    ) -> None:
+        uri = "mongodb://%s:%s@%s:%s/" % (
+            base.user_name,
+            base.user_passwd,
+            base.host,
+            base.port,
+        )
+        self.db_name = base.db_name
+        self.client = MongoClient(uri)
+        self.db = self.client[base.db_name]
+        self.collection = self.db[base.collection_name]
+
+    def create_database_record(self, task: Dict[str, Any]) -> str:
+        result = self.collection.insert_one(task)
+        return str(result.inserted_id)
 
 
 class TableReservationAbstract(ABC):
@@ -108,4 +132,14 @@ class CustomerTableReservation:
 
 
 if __name__ == "__main__":
-    pass
+    db = ConnectToRpi4(
+        user_name="ufo",
+        user_passwd="pempiai234",
+        host="192.168.1.81",
+        port=27017,
+        db_name="cafeteria",
+        collection_name="customer",
+    )
+    CafeteriaDataBase(db).create_database_record(
+        {"name": "customer", "customer_id": ""}
+    )
