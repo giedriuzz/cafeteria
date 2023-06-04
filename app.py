@@ -1,3 +1,19 @@
+import connect
+from main import MongoDb
+from pymongo.collection import Collection
+
+
+# mongo config
+mongodb_host = "localhost"
+mongodb_port = 27017
+database_name = "tasks"
+collection_name = "user_tasks"
+
+mongo = MongoDb()
+# connection
+db = connect.connect_to_mongodb(mongodb_host, mongodb_port, database_name)
+collection = db[collection_name]
+
 from main import CafeteriaTables, CustomerTableReservation, Customer
 import sys  #! #DEL only for debugging with launch.json argv
 
