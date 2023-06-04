@@ -10,6 +10,7 @@ logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger("sLogger")
 
 
+# new main class
 class TableReservationAbstract(ABC):
     @abstractmethod
     def get_time(self) -> tuple:
