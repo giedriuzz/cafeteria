@@ -36,7 +36,8 @@ Switching to MongoDb
 
 Database structure
     [] customer: _id, customer_name: str, registration_date: datetime
-            [] realationship: customer_id: str, table_name: str, table_number: int, registration_time: datetime
+            [] realationship: customer_id(_id "relation"): str, doc_type("table"): str, table_name: str, table_number: int, registration_time: datetime
+            [] relationship: customer_id:str, doc_type ("menu"):str, menu_type ("vegetablble and etc"):str, 
 
 
     
