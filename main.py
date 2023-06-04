@@ -2,6 +2,7 @@ import logging
 import logging.config
 import time
 from pymongo import MongoClient
+from pymongo.collection import Collection
 from typing import Dict, List, Any, Optional, Union
 from abc import ABC, abstractmethod
 from typing import List, Literal, Optional, Union
@@ -32,6 +33,11 @@ class CafeteriaDataBase:
     def create_database_record(self, task: Dict[str, Any]) -> str:
         result = self.collection.insert_one(task)
         return str(result.inserted_id)
+
+    def find_documents(self, field_name: str, value: str) -> List[Dict]:
+        query = {field_name: value}
+        documents = self.collection.find(query)
+        return list(documents)
 
 
 class TableReservationAbstract(ABC):
@@ -141,5 +147,7 @@ if __name__ == "__main__":
         collection_name="customer",
     )
     CafeteriaDataBase(db).create_database_record(
-        {"name": "customer", "customer_id": ""}
+        {"customer_name": "customer", "customer_phone": "+37061487965"}
     )
+    task = CafeteriaDataBase(db)
+    print(task.find_documents(field_name="customer_name", value="customer"))
