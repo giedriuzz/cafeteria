@@ -12,3 +12,10 @@ db = ConnectToRpi4(
     db_name="cafeteria",
     collection_name="customer",
 )
+
+querying = CafeteriaDataBase(db)
+print(querying.find_documents(field_name="user_name", value="Giedrius"))
+
+id = querying.get_customer_id_by_name(field_name="user_name", value="Giedrius")
+
+print(id)

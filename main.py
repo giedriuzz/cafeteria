@@ -2,10 +2,11 @@ import logging
 import logging.config
 import time
 from pymongo import MongoClient
-from pymongo.collection import Collection
+from pymongo.collection import Collection, Cursor
 from typing import Dict, List, Any, Optional, Union
 from abc import ABC, abstractmethod
 from typing import List, Literal, Optional, Union
+from bson.objectid import ObjectId
 from dataclasses import dataclass, field
 from connect.connect import ConnectToRpi4
 
@@ -38,6 +39,12 @@ class CafeteriaDataBase:
         query = {field_name: value}
         documents = self.collection.find(query)
         return list(documents)
+
+    def get_customer_id_by_name(self, field_name: str, value: str) -> List[Dict]:
+        query = {field_name: value}
+        documents = self.collection.find(query, {"_id": 1})
+        customer_id = [i["_id"] for i in documents]
+        return str(*customer_id)
 
 
 class TableReservationAbstract(ABC):
@@ -144,10 +151,41 @@ if __name__ == "__main__":
         host="192.168.1.81",
         port=27017,
         db_name="cafeteria",
-        collection_name="customer",
+        collection_name="dishes",
     )
-    CafeteriaDataBase(db).create_database_record(
-        {"customer_name": "customer", "customer_phone": "+37061487965"}
-    )
-    task = CafeteriaDataBase(db)
-    print(task.find_documents(field_name="customer_name", value="customer"))
+    cafeteria = CafeteriaDataBase(db)
+
+    # db_1 = cafeteria.create_database_record(
+    #     {
+    #         "table_name": "Single",
+    #         "table_number": 1,
+    #         "reservation_time": "20203-06-07T23:00:00  +0000",
+    #         "customer_id": "blabla",
+    #     }
+    # )
+    # db_2 = cafeteria.create_database_record("")
+    # task = CafeteriaDataBase(db)
+    # print(task.find_documents(field_name="customer_name", value="customer"))
+    # customer = cafeteria.create_database_record(
+    #     {"user_name": "Giedrius", "phone_number": "+37066768789"}
+    # )
+    # tables = cafeteria.create_database_record(
+    #     {
+    #         "table_name": "Single",
+    #         "table_number": 1,
+    #         "reservation_time": "2023-06-06T00:00:00Z",
+    #         "customer_id": "647e12a39b1bc7aa861dc1fd",
+    #     }
+    # # )
+    # dishes = cafeteria.create_database_record(
+    #     {
+    #         "dish_category": "vegetable",
+    #         "dish_name": "cepelinai su varške",
+    #         "dish_description": "cepeliniai is virtų bulvių su vargke",
+    #         "dish_weight": 500,
+    #         "preparation_time": 15,
+    #         "dish_calories": 1034,
+    #         "dish_price": 8.55,
+    #         "customer_id": "647e12a39b1bc7aa861dc1fd",
+    #     }
+    # )
