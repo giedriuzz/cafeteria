@@ -7,6 +7,7 @@ Cafeteria project : Create an live menu and payment system (a.k.a console progra
     how which are reserved/occupied. 
 [] The system must be able to show name/surname of the person of the reserved table 
     (CLI option : enter reserved table number ; OUTCOME: Name/Surname/Time Reserved)
+    ***
 [] After assigning table, system should show different menu options for breakfast,
     lunch , dinner , drinks (alcohol. alcohol free), to choose from. 
 [] Special menu for vegetarian and vegan must be included too in the special menu.
