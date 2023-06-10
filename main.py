@@ -15,11 +15,8 @@ logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger("sLogger")
 
 
-class CafeteriaDataBase:
-    def __init__(
-        self,
-        base: ConnectToRpi4,
-    ) -> None:
+class QueryingDataBase:
+    def __init__(self, base: ConnectToRpi4, collection_name: str) -> None:
         uri = "mongodb://%s:%s@%s:%s/" % (
             base.user_name,
             base.user_passwd,
@@ -29,11 +26,19 @@ class CafeteriaDataBase:
         self.db_name = base.db_name
         self.client = MongoClient(uri)
         self.db = self.client[base.db_name]
-        self.collection = self.db[base.collection_name]
+        self.collection = self.db[collection_name]
 
-    def create_database_record(self, task: Dict[str, Any]) -> str:
-        result = self.collection.insert_one(task)
+    def create_database_one_record(self, record: list[dict]) -> str:
+        result = self.collection.insert_one(record)
         return str(result.inserted_id)
+
+    def create_database_many_records(self, record: Dict[str, Any]) -> str:
+        """Create many records from list of dictionaries
+        dict_1 = {name:value}
+        dict_2 = {name:value}
+        function([dict_1, dict_2]) or function([{name:value}, {name:value])"""
+        result = self.collection.insert_many(record)
+        return str(result.inserted_ids)
 
     def find_documents(self, field_name: str, value: str) -> List[Dict]:
         query = {field_name: value}
@@ -44,7 +49,23 @@ class CafeteriaDataBase:
         query = {field_name: value}
         documents = self.collection.find(query, {"_id": 1})
         customer_id = [i["_id"] for i in documents]
-        return str(*customer_id)
+        return str(customer_id)
+
+    def update_one(self, query: Dict, update: Dict[str, Any]) -> int:
+        result = self.collection.update_one(query, {"$set": update})
+        return result.modified_count
+
+    def update_many(self, query: Dict, update: Dict[str, Any]) -> int:
+        result = self.collection.update_many(query, {"$set": update})
+        return result.modified_count
+
+    def delete_documents(collection: Collection, query: Dict) -> int:
+        result = collection.delete_many(query)
+        return result.deleted_count
+
+    def delete_documents(collection: Collection, query: Dict) -> int:
+        result = collection.delete_one(query)
+        return result.deleted_count
 
 
 class TableReservationAbstract(ABC):
