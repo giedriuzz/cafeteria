@@ -40,15 +40,17 @@ def find_user_by_name_and_phone(user_name: str, phone_number: str):
 
 config_file = "config.json"
 # Usage
-db = connect_to_mongodb(config_file)
+db_customer = connect_to_mongodb(config_file)
 
 
-querying_customer = QueryingDataBase(db, collection_name="customer")
+querying_customer = QueryingDataBase(db_customer, collection_name="customer")
 print(querying_customer.find_documents(field_name="user_name", value="Tadas Blinda"))
 
 id = querying_customer.get_customer_id_by_name(field_name="user_name", value="Giedrius")
 
 print(id)
-user_1 = {"user_name": "Bronius Morkūnas", "user_phone": "+37012345678"}
-user_2 = {"user_name": "Česlovas Šikšnius", "user_phone": "+37012345680"}
-querying_customer.create_database_many_records([user_1, user_2])
+# user_1 = {"user_name": "Bronius Morkūnas", "user_phone": "+37012345678"}
+# user_2 = {"user_name": "Česlovas Šikšnius", "user_phone": "+37012345680"}
+# querying_customer.create_database_many_records([user_1, user_2])
+
+querying_customer.delete_document({"user_name": "Česlovas Šikšnius"})

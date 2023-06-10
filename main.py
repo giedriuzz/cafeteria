@@ -59,12 +59,14 @@ class QueryingDataBase:
         result = self.collection.update_many(query, {"$set": update})
         return result.modified_count
 
-    def delete_documents(collection: Collection, query: Dict) -> int:
+    def delete_many_documents(self, collection: Collection, query: Dict) -> int:
         result = collection.delete_many(query)
         return result.deleted_count
 
-    def delete_documents(collection: Collection, query: Dict) -> int:
-        result = collection.delete_one(query)
+    def delete_document(self, query: Dict) -> int:
+        """Delete one document from the collection
+        function({'name': 'Tadas})"""
+        result = self.collection.delete_one(query)
         return result.deleted_count
 
 
