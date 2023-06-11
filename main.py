@@ -3,12 +3,13 @@ import logging.config
 import time
 from pymongo import MongoClient
 from pymongo.collection import Collection, Cursor
+from pymongo.results import InsertOneResult
 from typing import Dict, List, Any, Optional, Union
 from abc import ABC, abstractmethod
 from typing import List, Literal, Optional, Union
 from bson.objectid import ObjectId
 from dataclasses import dataclass, field
-from connect.connect import ConnectToRpi4
+from connect.connect_to_rpi import MainRpiRemoteDb
 
 
 logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
@@ -16,7 +17,7 @@ logger = logging.getLogger("sLogger")
 
 
 class QueryingDataBase:
-    def __init__(self, base: ConnectToRpi4, collection_name: str) -> None:
+    def __init__(self, base: MainRpiRemoteDb, collection_name: str) -> None:
         uri = "mongodb://%s:%s@%s:%s/" % (
             base.user_name,
             base.user_passwd,
@@ -34,9 +35,10 @@ class QueryingDataBase:
 
     def create_database_many_records(self, record: Dict[str, Any]) -> str:
         """Create many records from list of dictionaries
-        dict_1 = {name:value}
-        dict_2 = {name:value}
-        function([dict_1, dict_2]) or function([{name:value}, {name:value])"""
+        dict_1 = {name:value, etc}
+        dict_2 = {name:value, etc}
+        function([dict_1, dict_2]) or function([{name:value, etc}, {name:value, etc}])
+        """
         result = self.collection.insert_many(record)
         return str(result.inserted_ids)
 
@@ -46,10 +48,12 @@ class QueryingDataBase:
         return list(documents)
 
     def get_customer_id_by_name(self, field_name: str, value: str) -> List[Dict]:
+        """Get customer _id and return plain string
+        function(field_name='customer_name', value='Tadas Blinda')"""
         query = {field_name: value}
         documents = self.collection.find(query, {"_id": 1})
         customer_id = [i["_id"] for i in documents]
-        return str(customer_id)
+        return str(customer_id[0])
 
     def update_one(self, query: Dict, update: Dict[str, Any]) -> int:
         result = self.collection.update_one(query, {"$set": update})
@@ -168,15 +172,16 @@ class CustomerTableReservation:
 
 
 if __name__ == "__main__":
-    db = ConnectToRpi4(
-        user_name="ufo",
-        user_passwd="pempiai234",
-        host="192.168.1.81",
-        port=27017,
-        db_name="cafeteria",
-        collection_name="dishes",
-    )
-    cafeteria = CafeteriaDataBase(db)
+    pass
+    # db = ConnectToRpi4(
+    #     user_name="ufo",
+    #     user_passwd="pempiai234",
+    #     host="192.168.1.81",
+    #     port=27017,
+    #     db_name="cafeteria",
+    #     collection_name="dishes",
+    # )
+    # cafeteria = CafeteriaDataBase(db)
 
     # db_1 = cafeteria.create_database_record(
     #     {

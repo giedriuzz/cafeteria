@@ -1,56 +1,113 @@
-from pymongo import MongoClient
-from pymongo.collection import Collection
+from bson.objectid import ObjectId
 from pymongo.errors import ConnectionFailure, PyMongoError, ServerSelectionTimeoutError
-import json
-from connect.connect import ConnectToRpi4
+from connect.connect_to_rpi import ConnectToMongoWithConfig
 from main import QueryingDataBase
 from pymongo.operations import IndexModel
+from intermediate import Customer
 
 
-def connect_to_mongodb(config: str) -> MongoClient:
-    """prisijungiama prie RPI"""
-    try:
-        with open(config, "r") as f:
-            config = json.load(f)
+config_file = "config.json"
+db_cafeteria = ConnectToMongoWithConfig.connect_to_mongodb(config_file)
 
-        host = config.get("host")
-        port = config.get("port")
-        username = config.get("user_name")
-        password = config.get("user_psswd")
-        auth_source = config.get("database")
-        # collection_name = config.get("collection")
 
-        db = ConnectToRpi4(
-            user_name=username,
-            user_passwd=password,
-            host=host,
-            port=port,
-            db_name=auth_source,
-        )
-        return db
+collection_customer = QueryingDataBase(db_cafeteria, collection_name="customer")
+collection_tables = QueryingDataBase(db_cafeteria, collection_name="tables")
+collection_menu = QueryingDataBase(db_cafeteria, collection_name="dishes")
+customer = Customer()
 
-    except PyMongoError as e:
-        print("An error occurred:", str(e))
-        return None
+print("Welcome to our restaurant!", end="\n")
+customer_name = input("Please say your full name: ")
+customer_phone = input("Please say your phone number: ")
+
+find_customer = customer.search_customer(
+    field_name="customer_name", value=customer_name
+)
 
 
 def find_user_by_name_and_phone(user_name: str, phone_number: str):
     pass
 
 
-config_file = "config.json"
-# Usage
-db_customer = connect_to_mongodb(config_file)
+# print(
+#     collection_customer.find_documents(field_name="customer_name", value=customer_name)
+# )
 
-
-querying_customer = QueryingDataBase(db_customer, collection_name="customer")
-print(querying_customer.find_documents(field_name="user_name", value="Tadas Blinda"))
-
-id = querying_customer.get_customer_id_by_name(field_name="user_name", value="Giedrius")
+id = collection_customer.get_customer_id_by_name(
+    field_name="customer_name", value="Tadas Blinda"
+)
 
 print(id)
-# user_1 = {"user_name": "Bronius Morkūnas", "user_phone": "+37012345678"}
-# user_2 = {"user_name": "Česlovas Šikšnius", "user_phone": "+37012345680"}
-# querying_customer.create_database_many_records([user_1, user_2])
+id_fnd = collection_customer.find_documents(field_name="_id", value=ObjectId(id))
 
-querying_customer.delete_document({"user_name": "Česlovas Šikšnius"})
+
+print(f"finded : {id_fnd}")
+# customer_1 = {"customer_name": "Bronius Morkūnas", "customer_phone": "+37012345678"}
+# customer_2 = {"customer_name": "Česlovas Šikšnius", "customer_phone": "+37012345680"}
+# customer_3 = {"customer_name": "Tadas Blinda", "customer_phone": "+374512345680"}
+# customer_4 = {"customer_name": "Česlovas Šikšnius", "customer_phone": "+37011345680"}
+# customer_5 = {"customer_name": "Romas Blinda", "customer_phone": "+374512345689"}
+# customer_6 = {"customer_name": "Robertas Kalnius", "customer_phone": "+37011385680"}
+# collection_customer.create_database_many_records(
+#     [customer_1, customer_2, customer_3, customer_4, customer_5, customer_6]
+# )
+
+# collection_customer.delete_document({"customer_name": "Česlovas Šikšnius"})
+
+# --->> Create tables in collection "tables"
+# table_1 = {
+#     "table_name": "single",
+#     "table_number": "1",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_2 = {
+#     "table_name": "single",
+#     "table_number": "2",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_3 = {
+#     "table_name": "single",
+#     "table_number": "3",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_4 = {
+#     "table_name": "double",
+#     "table_number": "4",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_5 = {
+#     "table_name": "double",
+#     "table_number": "5",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_6 = {
+#     "table_name": "double",
+#     "table_number": "6",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_7 = {
+#     "table_name": "family",
+#     "table_number": "7",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_8 = {
+#     "table_name": "family",
+#     "table_number": "8",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# table_9 = {
+#     "table_name": "family",
+#     "table_number": "9",
+#     "reservation_time": 0,
+#     "customer_id": "",
+# }
+# collection_tables.create_database_many_records(
+#     [table_1, table_2, table_3, table_4, table_5, table_6, table_7, table_8, table_9]
+# )
