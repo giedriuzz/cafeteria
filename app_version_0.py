@@ -1,8 +1,8 @@
-from bson.objectid import ObjectId
-from pymongo.errors import ConnectionFailure, PyMongoError, ServerSelectionTimeoutError
+# from pymongo.errors import ConnectionFailure, PyMongoError, ServerSelectionTimeoutError
 from connect.connect_to_rpi import ConnectToMongoWithConfig
 from main import QueryingDataBase
-from pymongo.operations import IndexModel
+
+# from pymongo.operations import IndexModel
 from intermediate import Customer
 
 
@@ -15,32 +15,42 @@ collection_tables = QueryingDataBase(db_cafeteria, collection_name="tables")
 collection_menu = QueryingDataBase(db_cafeteria, collection_name="dishes")
 customer = Customer()
 
+
+def input_customer_name_and_phone():
+    customer_name = input("Please say your full name: ")
+    customer_phone = input("Please say your phone number: ")
+    return customer_name, customer_phone
+
+
 print("Welcome to our restaurant!", end="\n")
-customer_name = input("Please say your full name: ")
-customer_phone = input("Please say your phone number: ")
-
-find_customer = customer.search_customer(
-    field_name="customer_name", value=customer_name
-)
-
-
-def find_user_by_name_and_phone(user_name: str, phone_number: str):
-    pass
+while True:
+    reserved_before = input("Do you was reserved before ?\nYES\nNO\n:").lower()
+    if reserved_before == "yes" or reserved_before == "y":
+        name = input_customer_name_and_phone()
+        find_customer = customer.search_customer(
+            field_name="customer_name", value=name[0]
+        )
+        print(find_customer)
+        break
+    else:
+        name = input_customer_name_and_phone()
+        add_customer = collection_customer.create_database_one_record(
+            {"customer_name": name[0], "customer_phone": name[1]}
+        )
+        break
 
 
 # print(
 #     collection_customer.find_documents(field_name="customer_name", value=customer_name)
 # )
 
-id = collection_customer.get_customer_id_by_name(
-    field_name="customer_name", value="Tadas Blinda"
-)
+# id = customer.get_customer_id_by_name(field_name="customer_name", value="Tadas Blinda")
 
-print(id)
-id_fnd = collection_customer.find_documents(field_name="_id", value=ObjectId(id))
+# print(id)
+# id_fnd = collection_customer.find_documents(field_name="_id", value=ObjectId(id))
 
 
-print(f"finded : {id_fnd}")
+# print(f"finded : {id_fnd}")
 # customer_1 = {"customer_name": "Bronius Morkūnas", "customer_phone": "+37012345678"}
 # customer_2 = {"customer_name": "Česlovas Šikšnius", "customer_phone": "+37012345680"}
 # customer_3 = {"customer_name": "Tadas Blinda", "customer_phone": "+374512345680"}

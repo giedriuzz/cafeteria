@@ -47,14 +47,6 @@ class QueryingDataBase:
         documents = self.collection.find(query)
         return list(documents)
 
-    def get_customer_id_by_name(self, field_name: str, value: str) -> List[Dict]:
-        """Get customer _id and return plain string
-        function(field_name='customer_name', value='Tadas Blinda')"""
-        query = {field_name: value}
-        documents = self.collection.find(query, {"_id": 1})
-        customer_id = [i["_id"] for i in documents]
-        return str(customer_id[0])
-
     def update_one(self, query: Dict, update: Dict[str, Any]) -> int:
         result = self.collection.update_one(query, {"$set": update})
         return result.modified_count
