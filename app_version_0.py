@@ -24,7 +24,7 @@ def input_customer_name_and_phone():
 
 print("Welcome to our restaurant!", end="\n")
 while True:
-    reserved_before = input("Do you was reserved before ?\nYES\nNO\n:").lower()
+    reserved_before = input("Do you was reserved before ?\nNO\YES\nYou answer:").lower()
     if reserved_before == "yes" or reserved_before == "y":
         name = input_customer_name_and_phone()
         find_customer = customer.search_customer(
