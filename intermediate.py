@@ -32,11 +32,9 @@ class Customer:
         names = {"customer_name": name}
         filters = {"_id": 0}
         filtered = collection_customer.filter_fields(fields=names, filters=filters)
-        a = [i for i in enumerate(filtered, 1)]
 
-        return [*a]
         for i in enumerate(filtered, 1):
-            print(*i[1].values())
+            print(i[0], [x for x in i[1]])
 
         # return [enumerate(x, 1) for x in filtered]
 
