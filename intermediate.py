@@ -27,3 +27,29 @@ class Customer:
         )
         customer_id = [i["_id"] for i in customer]
         return str(customer_id[0])
+
+    def get_customers_list_by_name(self, name: str) -> List[Dict]:
+        names = {"customer_name": name}
+        filters = {"_id": 0}
+        filtered = collection_customer.filter_fields(fields=names, filters=filters)
+        a = [i for i in enumerate(filtered, 1)]
+
+        return [*a]
+        for i in enumerate(filtered, 1):
+            print(*i[1].values())
+
+        # return [enumerate(x, 1) for x in filtered]
+
+
+if __name__ == "__main__":
+    # def search_customer(field_name: str, value: str) -> str:
+    #     customer = collection_customer.find_documents(
+    #         field_name=field_name, value=value
+    #     )
+    #     for customer in customer:
+    #         print(customer)
+
+    # search_customer(field_name="customer_name", value="Giedrius Kuprys")
+    # search_customer(field_name="customer_name", value="Tadas Blinda")
+    customer = Customer()
+    print(customer.get_customers_list_by_name(name="Tadas Blinda"))

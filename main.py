@@ -65,6 +65,12 @@ class QueryingDataBase:
         result = self.collection.delete_one(query)
         return result.deleted_count
 
+    def filter_fields(self, fields: dict, filters: dict) -> List[dict]:
+        db_fields = {**fields}
+        filter = {**filters}
+        result = self.collection.find(db_fields, filter)
+        return list(result)
+
 
 class TableReservationAbstract(ABC):
     @abstractmethod
