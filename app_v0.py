@@ -7,8 +7,10 @@ from main import QueryingDataBase
 from intermediate import Customer
 
 
-config_file = "config.json"
-db_cafeteria = ConnectToMongoWithConfig.connect_to_mongodb(config_file)
+config_file = (
+    "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
+)
+db_cafeteria = ConnectToMongoWithConfig(config_file).connect_to_mongodb()
 
 
 collection_customer = QueryingDataBase(db_cafeteria, collection_name="customer")
@@ -92,7 +94,7 @@ print(filtered)
 # id_fnd = collection_customer.find_documents(field_name="_id", value=ObjectId(id))
 
 
-# print(f"finded : {id_fnd}")
+# # print(f"finded : {id_fnd}")
 # customer_1 = {"customer_name": "Bronius Morkūnas", "customer_phone": "+37012345678"}
 # customer_2 = {"customer_name": "Česlovas Šikšnius", "customer_phone": "+37012345680"}
 # customer_3 = {"customer_name": "Tadas Blinda", "customer_phone": "+374512345680"}

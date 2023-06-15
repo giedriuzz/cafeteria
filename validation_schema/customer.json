@@ -1,0 +1,14 @@
+{
+        "validator":{
+            "$jsonSchema": {
+                "bsonType": "object",
+                "required":["customer_name", "phone_number"],
+                "properties":{
+                    "customer_name" : {"bsonType": "string", "required":true},
+                    "phone_number" : {"bsonType": "int", "required":true}
+                }
+            }
+        }
+    }
+
+

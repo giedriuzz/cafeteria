@@ -2,8 +2,10 @@ from typing import List, Dict, Optional, Union
 from connect.connect_to_rpi import ConnectToMongoWithConfig
 from main import QueryingDataBase
 
-config_file = "config.json"
-db_cafeteria = ConnectToMongoWithConfig.connect_to_mongodb(config_file)
+config_file = (
+    "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
+)
+db_cafeteria = ConnectToMongoWithConfig(config_file).connect_to_mongodb()
 collection_customer = QueryingDataBase(db_cafeteria, collection_name="customer")
 
 
@@ -28,14 +30,12 @@ class Customer:
         customer_id = [i["_id"] for i in customer]
         return str(customer_id[0])
 
-    def get_customers_list_by_name(self, name: str) -> List[Dict]:
+    def get_customers_list_by_name(self, name: str) -> List[list]:
         names = {"customer_name": name}
         filters = {"_id": 0}
         filtered = collection_customer.filter_fields(fields=names, filters=filters)
-        for i in enumerate(filtered, 1):
-            print(i[0], *[x for x in i[1].values()])
-
-        # return [enumerate(x, 1) for x in filtered]
+        b = [[*i.values()] for i in filtered]
+        return b
 
 
 if __name__ == "__main__":
@@ -49,4 +49,6 @@ if __name__ == "__main__":
     # search_customer(field_name="customer_name", value="Giedrius Kuprys")
     # search_customer(field_name="customer_name", value="Tadas Blinda")
     customer = Customer()
-    print(customer.get_customers_list_by_name(name="Tadas Blinda"))
+    list_of_same_documents = customer.get_customers_list_by_name(name="Giedrius Kuprys")
+    for customer in enumerate(list_of_same_documents, 1):
+        print(customer[1][1])
