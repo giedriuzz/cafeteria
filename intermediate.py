@@ -10,14 +10,11 @@ collection_customer = QueryingDataBase(db_cafeteria, collection_name="customer")
 
 
 class Customer:
-    def search_customer(self, field_name: str, value: str) -> str:
+    def search_customer(self, field_name: str, value: str) -> List[Dict]:
         customer = collection_customer.find_documents(
             field_name=field_name, value=value
         )
-        if not customer:
-            return False
-        else:
-            return True
+        return customer
 
     def get_customer_id_by_name(
         self, field_name: str, value: str

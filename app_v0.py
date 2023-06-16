@@ -69,7 +69,7 @@ while True:
     if reserved_before.lower() == "yes" or reserved_before == "y":
         name = input_only_string(_say_name)
         find_customer = customer.search_customer(field_name="customer_name", value=name)
-        if find_customer == True:
+        if find_customer:
             print(name)
         else:
             print("Sorry we couldn't find you in our restaurant list")

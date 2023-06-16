@@ -10,12 +10,15 @@ class MainRpiRemoteDb:
     user_passwd: str
     host: str
     port: int
-    db_name: int
+    db_name: str
+    collection: str
 
 
 class ConnectToMongoWithConfig:
-    def __init__(self, config: json) -> None:
+    def __init__(self, config: json, db_name: str, collection_name: str) -> None:
         self.config = config
+        self.db_name = db_name
+        self.collection_name = collection_name
 
     def connect_to_mongodb(self) -> MongoClient:
         """prisijungiama prie RPI"""
@@ -23,18 +26,18 @@ class ConnectToMongoWithConfig:
             with open(self.config, "r") as f:
                 config = json.load(f)
 
-            host = config.get("host")
-            port = config.get("port")
             username = config.get("user_name")
             password = config.get("user_psswd")
-            auth_source = config.get("database")
+            host = config.get("host")
+            port = config.get("port")
 
             db = MainRpiRemoteDb(
                 user_name=username,
                 user_passwd=password,
                 host=host,
                 port=port,
-                db_name=auth_source,
+                db_name=self.db_name,
+                collection=self.collection_name,
             )
             return db
 
@@ -48,7 +51,7 @@ class ConnectToMongoWithConfig:
 
 class CreateValidationSchema(ConnectToMongoWithConfig):
     def __init__(self, base: MainRpiRemoteDb, collection_name: str):
-        # self.base = base
+        self.collection_name = collection_name
         uri = "mongodb://%s:%s@%s:%s/" % (
             base.user_name,
             base.user_passwd,
@@ -71,16 +74,36 @@ class CreateValidationSchema(ConnectToMongoWithConfig):
 
         self.db.command("collMod", self.collection.name, config)
 
+    def drop_collection(self) -> bool:
+        try:
+            self.db.drop_collection(self.collection_name)
+            return True
+        except:
+            return False
+
+    def drop_database(self, db_name) -> bool:
+        try:
+            self.client.drop_database(db_name)
+            return True
+        except:
+            return False
+
 
 if __name__ == "__main__":
     config_file = (
         "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
     )
-    db = ConnectToMongoWithConfig(config=config_file).connect_to_mongodb()
-    schema = CreateValidationSchema(base=db, collection_name="customer")
+    db = ConnectToMongoWithConfig(
+        config=config_file, db_name="animals", collection_name="dogs"
+    ).connect_to_mongodb()
+    schema = CreateValidationSchema(base=db, collection_name="cafeteria")
 
-    schema.create_unique_index(
-        unique_field_name="customer_phone", number=1, unique_bool=True
-    )
-    customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
-    print(schema.define_schema_validation_rules(customer_config))
+    # schema.create_unique_index(
+    #     unique_field_name="customer_phone", number=1, unique_bool=False
+    # )
+
+    # customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
+    # print(schema.define_schema_validation_rules(customer_config))
+
+    # schema.drop_collection()
+    schema.drop_database("animals")
