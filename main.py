@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from typing import List, Literal, Optional, Union
 from bson.objectid import ObjectId
 from dataclasses import dataclass, field
-from connect.connect_to_rpi import MainRpiRemoteDb
+from connect.connect_to_rpi import ConnectToMongoWithConfig
 
 
 logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)
@@ -17,19 +17,13 @@ logger = logging.getLogger("sLogger")
 
 
 class QueryingDataBase:
-    def __init__(self, base: MainRpiRemoteDb, collection_name: str) -> None:
-        uri = "mongodb://%s:%s@%s:%s/" % (
-            base.user_name,
-            base.user_passwd,
-            base.host,
-            base.port,
-        )
-        self.db_name = base.db_name
-        self.client = MongoClient(uri)
-        self.db = self.client[base.db_name]
+    def __init__(self, uri: MongoClient, db_name: str, collection_name: str) -> None:
+        self.db_name = db_name
+        self.client = uri
+        self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
-    def create_database_one_record(self, record: list[dict]) -> str:
+    def create_database_one_record(self, record: dict) -> str:
         result = self.collection.insert_one(record)
         return str(result.inserted_id)
 
@@ -171,6 +165,21 @@ class CustomerTableReservation:
 
 if __name__ == "__main__":
     pass
+
+    config_file = (
+        "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
+    )
+    db_uri = ConnectToMongoWithConfig(config_file).get_uri_link()
+
+    collection_customer = QueryingDataBase(
+        uri=db_uri, db_name="cafeteria", collection_name="customer"
+    )
+
+    # collection_customer.create_database_one_record(
+    #     {"client_name": "client", "client_phone_number": "0000000000"}
+    # )
+    collection_customer.delete_document({"client_name": "client"})
+
     # db = ConnectToRpi4(
     #     user_name="ufo",
     #     user_passwd="pempiai234",
@@ -195,14 +204,14 @@ if __name__ == "__main__":
     # customer = cafeteria.create_database_record(
     #     {"user_name": "Giedrius", "phone_number": "+37066768789"}
     # )
-    # tables = cafeteria.create_database_record(
+    # tables = db .create_database_record(
     #     {
     #         "table_name": "Single",
     #         "table_number": 1,
     #         "reservation_time": "2023-06-06T00:00:00Z",
     #         "customer_id": "647e12a39b1bc7aa861dc1fd",
     #     }
-    # # )
+    # )
     # dishes = cafeteria.create_database_record(
     #     {
     #         "dish_category": "vegetable",

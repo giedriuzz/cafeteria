@@ -2,12 +2,6 @@ from typing import List, Dict, Optional, Union
 from connect.connect_to_rpi import ConnectToMongoWithConfig
 from main import QueryingDataBase
 
-config_file = (
-    "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
-)
-db_cafeteria = ConnectToMongoWithConfig(config_file).connect_to_mongodb()
-collection_customer = QueryingDataBase(db_cafeteria, collection_name="customer")
-
 
 class Customer:
     def search_customer(self, field_name: str, value: str) -> List[Dict]:

@@ -6,7 +6,7 @@ import datetime
 from datetime import timezone, timedelta
 from tqdm import tqdm
 import maskpass
-from connect.connect import ConnectToRpi4
+from connect.connect_docker import ConnectToRpi4
 from main import TaskManager
 
 logging.config.fileConfig(fname="logging.conf", disable_existing_loggers=False)

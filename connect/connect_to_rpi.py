@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import json
 from typing import Any, MutableMapping
 from pymongo.errors import PyMongoError, ConnectionFailure
-from urllib.parse import quote_plus  # kodavimas
+from urllib.parse import quote_plus
 
 
 class ConnectToMongoWithConfig:
@@ -35,6 +35,9 @@ class ConnectToMongoWithConfig:
             port,
         )
         self.client = MongoClient(uri)
+
+    def get_uri_link(self) -> MongoClient:
+        return self.client
 
     def drop_database(self, db_name: str) -> str:
         """function for drop database
@@ -99,9 +102,9 @@ if __name__ == "__main__":
     config_file = "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"  #! #DEL all lines before production
     db = ConnectToMongoWithConfig(config_file)
 
-    print(db.drop_collection(db_name="test_db", collection_name="test"))
+    # print(db.drop_collection(db_name="test_db", collection_name="test"))
 
-    print(db.drop_database(db_name="test_db"))
+    # print(db.drop_database(db_name="test_db"))
 
     # print(
     #     db.create_unique_index(
@@ -132,8 +135,12 @@ if __name__ == "__main__":
     # #     unique_field_name="customer_phone", number=1, unique_bool=False
     # # )
 
-    # # customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
-    # # print(schema.define_schema_validation_rules(customer_config))
+    customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
+    print(
+        db.define_schema_validation_rules(
+            schema_json=customer_config, db_name="cafeteria", collection_name="customer"
+        )
+    )
 
     # # schema.drop_collection()
     # schema.drop_database("animals")

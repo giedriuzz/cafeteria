@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e" pages="2">
     <diagram id="La1SqYT-2nVoXK81vz49" name="db configuration">
-        <mxGraphModel dx="1596" dy="1216" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="561" dy="797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -464,7 +464,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="Hj67_GPVr_AqYhwcx2ub" name="customer">
-        <mxGraphModel dx="1596" dy="1216" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="561" dy="797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -622,34 +622,6 @@
                         <mxPoint x="280" y="640" as="sourcePoint"/>
                         <mxPoint x="330" y="590" as="targetPoint"/>
                     </mxGeometry>
-                </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
-    <diagram id="pSgJdkAwbFdOoeAWEA8K" name="connect">
-        <mxGraphModel dx="606" dy="1216" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
-                <mxCell id="nY5I5BG1F_RrEl5fhDDQ-3" value="#ConnecToMongoWithConfig" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fontColor=#00D900;fontSize=14;" vertex="1" parent="1">
-                    <mxGeometry x="90" y="20" width="270" height="156" as="geometry">
-                        <mxRectangle x="90" y="20" width="240" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="nY5I5BG1F_RrEl5fhDDQ-4" value="+ config: json+ field: type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="nY5I5BG1F_RrEl5fhDDQ-3">
-                    <mxGeometry y="26" width="270" height="26" as="geometry"/>
-                </mxCell>
-                <mxCell id="nY5I5BG1F_RrEl5fhDDQ-5" value="+db_name: str&#10;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="nY5I5BG1F_RrEl5fhDDQ-3">
-                    <mxGeometry y="52" width="270" height="26" as="geometry"/>
-                </mxCell>
-                <mxCell id="nY5I5BG1F_RrEl5fhDDQ-6" value="+collection_name:" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="nY5I5BG1F_RrEl5fhDDQ-3">
-                    <mxGeometry y="78" width="270" height="26" as="geometry"/>
-                </mxCell>
-                <mxCell id="nY5I5BG1F_RrEl5fhDDQ-7" value="#read_conf_from_json()" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;glass=0;shadow=0;fillColor=#e3c800;fontColor=#000000;strokeColor=#B09500;" vertex="1" parent="nY5I5BG1F_RrEl5fhDDQ-3">
-                    <mxGeometry y="104" width="270" height="26" as="geometry"/>
-                </mxCell>
-                <mxCell id="nY5I5BG1F_RrEl5fhDDQ-8" value="#connect_to_mongo()" style="text;strokeColor=#B09500;fillColor=#e3c800;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#000000;" vertex="1" parent="nY5I5BG1F_RrEl5fhDDQ-3">
-                    <mxGeometry y="130" width="270" height="26" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

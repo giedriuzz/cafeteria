@@ -10,12 +10,13 @@ from intermediate import Customer
 config_file = (
     "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
 )
-db_cafeteria = ConnectToMongoWithConfig(config_file).connect_to_mongodb()
+db_uri = ConnectToMongoWithConfig(config_file).get_uri_link()
 
-
-collection_customer = QueryingDataBase(db_cafeteria, collection_name="customer")
-collection_tables = QueryingDataBase(db_cafeteria, collection_name="tables")
-collection_menu = QueryingDataBase(db_cafeteria, collection_name="dishes")
+collection_customer = QueryingDataBase(
+    uri=db_uri, db_name="cafeteria", collection_name="customer"
+)
+# collection_tables = QueryingDataBase(db_cafeteria, collection_name="tables")
+# collection_menu = QueryingDataBase(db_cafeteria, collection_name="dishes")
 customer = Customer()
 
 _say_name = "Please say your full name: "
@@ -54,11 +55,12 @@ def input_only_string(string: str) -> str:
             continue
 
 
-def add_customer_to_db(user_name: str):
+def add_customer_to_db(user_name: str) -> bool:
     customer_phone = input_only_number(_say_phone)
     collection_customer.create_database_one_record(
         {"customer_name": user_name, "customer_phone": customer_phone}
     )
+    return True
 
 
 print("Welcome to our restaurant!", end="\n")
