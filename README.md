@@ -4,9 +4,9 @@ It's a Python project **$\color{green}{\textsf{Cafeteria}}$** for learning OOP, 
 
 - You can reserve a table.
 - You can customize the menu.
-- You can customize a tables.
+- You can customize tables.
 - You can customize a menu of meals and drinks.
-- You can get receipt with that information:</br>
+- You can get a receipt with that information:</br>
   - Client name.
   - Table.
   - Meals and drinks.
