@@ -2,7 +2,7 @@
 
 
 
-It's Python project <font color="green">**"Cafeteria"**</font> for learn OOP, data bases, Jango.</br> :warning: Everything runs in Terminal.
+It's Python project <code style="color : greenyellow">**"Cafeteria"**</code> for learn OOP, data bases, Jango.</br> :warning: Everything runs in Terminal.
 
 - You can reserve a table.
 - You can customize menu before pay.
