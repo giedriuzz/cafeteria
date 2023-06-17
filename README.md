@@ -2,7 +2,7 @@
 
 
 
-It's Python project $\color{red}{\textsf{Cafeteria}}$ for learn OOP, data bases, Jango.</br> :warning: Everything runs in Terminal.
+It's Python project $\color{greenyellow}{\textsf{Cafeteria}}$ for learn OOP, data bases, Jango.</br> :warning: Everything runs in Terminal.
 
 
 - You can reserve a table.
