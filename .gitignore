@@ -131,8 +131,4 @@ dmypy.json
 # My files
 tests.ipynb
 logfile.log
-<<<<<<< HEAD
 .vscode
-=======
-.vscode
->>>>>>> 08e552542a7b094f59b64ba9ec27b9ba4498b81b
