@@ -96,9 +96,7 @@ class ConnectToMongoWithConfig:
 
 
 if __name__ == "__main__":
-    config_file = (
-        "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
-    )
+    config_file = "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"  #! #DEL all lines before production
     db = ConnectToMongoWithConfig(config_file)
 
     print(db.drop_collection(db_name="test_db", collection_name="test"))
