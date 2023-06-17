@@ -2,15 +2,15 @@
 
 
 
-It's Python project <font color="green">**"Cafeteria"**</font> for learn OOP, data bases, Jango.</br> :warning: Everything runs in Terminal.
+It's a Python project <font color="green">**"Cafeteria"**</font> for learn OOP, databases, and Jango.</br> :warning: Everything runs in Terminal.
 
 - You can reserve a table.
-- You can customize menu before pay.
+- You can customize the menu before paying.
 
-How run a program
+How to run a program
 
 - file connect_to_rpi.py
-First need declare some values.
+First, we need to declare some values.
 - 
 
 ***
