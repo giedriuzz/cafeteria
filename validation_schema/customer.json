@@ -1,12 +1,16 @@
 {
-    "collMod":"",
-        "validator":{
-            "$jsonSchema": {
-                "bsonType": "object",
-                "required":["client_name", "client_phone_number"],
-                "properties":{
-                    "client_name" : {"bsonType": "string", "required":true},
-                    "client_phone_number" : {"bsonType": "int", "required":true}
+    "collMod":"customer",
+    "validator":{
+        "$jsonSchema": {
+            "bsonType": "object",
+            "required":["client_name", "client_phone_number"],
+            "properties":{
+                "client_name" : {"bsonType": "string"},
+                "client_phone_number" : {
+                    "bsonType": "string",
+                    "minLength": 9,
+                    "maxLength": 13
+                    }
                 }
             }
         }

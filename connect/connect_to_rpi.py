@@ -5,6 +5,7 @@ from typing import Any, MutableMapping
 from pymongo.errors import PyMongoError, ConnectionFailure
 from urllib.parse import quote_plus
 from pymongo.collection import Collection
+from collections import OrderedDict
 
 
 class ConnectToMongoWithConfig:
@@ -65,9 +66,7 @@ class ConnectToMongoWithConfig:
         except PyMongoError as e:
             return f"An error occurred: {str(e)}"
 
-    def define_schema_validation_rules(
-        self, schema_json: Any, db_name: str, collection_name: str
-    ) -> str:
+    def define_schema_validation_rules(self, schema_json: Any, db_name: str) -> str:
         """function for define schema validation rules.
             JSON file can be stored where you want, just give a Relative Path:
             config_file = (
@@ -75,10 +74,10 @@ class ConnectToMongoWithConfig:
         )
         """
         with open(schema_json, "r") as f:
-            schema_json = json.load(f)
+            schema_json = json.loads(f.read())
+        load_validation_schema = OrderedDict(schema_json)
         data_base = self.client[db_name]
-        collection = data_base[collection_name]
-        data_base.command("collMod", collection.name, schema_json)
+        data_base.command(load_validation_schema)
         return f"Schema validation rules was successfully applied!"
 
     def create_unique_index(
@@ -104,12 +103,6 @@ if __name__ == "__main__":
     config_file = "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"  #! #DEL all lines before production
     db = ConnectToMongoWithConfig(config_file)
 
-    # print(
-    #     db.drop_collection(
-    #         db_name="cafeteria", collection_name="customer.cafeteria.customer"
-    #     )
-    # )
-
     # print(db.drop_database(db_name="test_db"))
 
     # print(
@@ -122,7 +115,7 @@ if __name__ == "__main__":
     #     )
     # )
     # print(db.drop_database(db_name="exercise_db"))
-    # print(db.drop_collection(db_name="pets", collection_name="error"))
+    # print(db.drop_collection(db_name="cafeteria", collection_name="customer"))
     # print(
     #     db.create_unique_index(
     #         unique_field_name="name",
@@ -141,12 +134,12 @@ if __name__ == "__main__":
     # #     unique_field_name="customer_phone", number=1, unique_bool=False
     # # )
 
-    # customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
-    # print(
-    #     db.define_schema_validation_rules(
-    #         schema_json=customer_config, db_name="cafeteria", collection_name="customer"
-    #     )
-    # )
+    customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
+    print(
+        db.define_schema_validation_rules(
+            schema_json=customer_config, db_name="cafeteria"
+        )
+    )
 
     # # schema.drop_collection()
     # schema.drop_database("animals")

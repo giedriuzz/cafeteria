@@ -1,6 +1,6 @@
 from typing import List, Dict, Optional, Union
 from connect.connect_to_rpi import ConnectToMongoWithConfig
-from main import QueryingDataBase
+from main_for_delete import QueryingDataBase
 
 
 class Customer:
