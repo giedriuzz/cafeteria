@@ -2,7 +2,7 @@ import logging
 import logging.config
 import time
 from pymongo import MongoClient
-from pymongo.collection import Collection, Cursor
+from pymongo.collection import Collection
 from pymongo.results import InsertOneResult
 from typing import Dict, List, Any, Optional, Union
 from abc import ABC, abstractmethod
@@ -17,6 +17,8 @@ logger = logging.getLogger("sLogger")
 
 
 class QueryingDataBase:
+    """Base class for querying of database"""
+
     def __init__(self, uri: MongoClient, db_name: str, collection_name: str) -> None:
         self.db_name = db_name
         self.client = uri
@@ -24,6 +26,8 @@ class QueryingDataBase:
         self.collection = self.db[collection_name]
 
     def create_database_one_record(self, record: dict) -> str:
+        """'Insert one record into database
+        function({'name': record, 'value': record, 'type': record and etc})"""
         result = self.collection.insert_one(record)
         return str(result.inserted_id)
 
@@ -39,12 +43,15 @@ class QueryingDataBase:
     def find_one_document(self, field_name: str, value: str) -> Union[dict, None]:
         """Find document in collection
         function(field_name='field_name', value='value') returns
-        list of dictionaries"""
+        dict value or None"""
         query = {field_name: value}
         document = self.collection.find_one(query)
-        return str(document)
+        return document
 
     def find_documents(self, field_name: str, value: str) -> List[Dict]:
+        """Find documents in collection
+        function(field_name='field_name', value='value') returns
+        list of dictionaries"""
         query = {field_name: value}
         documents = self.collection.find(query)
         return list(documents)
@@ -183,10 +190,16 @@ if __name__ == "__main__":
         uri=db_uri, db_name="cafeteria", collection_name="customer"
     )
 
-    # collection_customer.create_database_one_record(
-    #     {"client_name": "client", "client_phone_number": "0000000000"}
+    # print(
+    #     collection_customer.create_database_one_record(
+    #         {"client_name": "client", "client_phone_number": "0000000000"}
+    #     )
     # )
-    collection_customer.delete_document({"client_name": "client"})
+    # collection_customer.delete_document({"client_name": "client"})
+    # print(collection_customer.find_documents(field_name="client_name", value="client"))
+    print(
+        collection_customer.find_one_document(field_name="client_name", value="client")
+    )
 
     # db = ConnectToRpi4(
     #     user_name="ufo",

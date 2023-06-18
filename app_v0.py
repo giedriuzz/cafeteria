@@ -10,11 +10,22 @@ from intermediate import Customer
 config_file = (
     "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
 )
-db_uri = ConnectToMongoWithConfig(config_file).get_uri_link()
+connection = ConnectToMongoWithConfig(config=config_file)
+db = connection.get_uri_link()
 
-collection_customer = QueryingDataBase(
-    uri=db_uri, db_name="cafeteria", collection_name="customer"
+customer_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="customer"
 )
+tables_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="tables"
+)
+meals_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="meals"
+)
+receipts_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="receipts"
+)
+
 # collection_tables = QueryingDataBase(db_cafeteria, collection_name="tables")
 # collection_menu = QueryingDataBase(db_cafeteria, collection_name="dishes")
 customer = Customer()

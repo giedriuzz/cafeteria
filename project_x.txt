@@ -24,6 +24,8 @@ Cafeteria project : Create an live menu and payment system (a.k.a console progra
 
 [] In github write README.md file
 
+# Part 1
+
 []Please enter your name: Arturas
 []Please enter your surname: Ardzijauskas
 []Welcome Arturas, Ardzijauskas to our restaurant
