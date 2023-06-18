@@ -1,0 +1,15 @@
+{
+    "collMod" : "tables",
+    "validator" : {
+        "&jsonSchema" : {
+            "bsonType" : "object",
+            "required" : ["table_name", "table_number", "reservation_time", "customer_id"],
+            "properties": {
+                "table_name": {"bsonType" : "string"},
+                "table_number": {"bsonType" : "int"},
+                "reservation_time": {"bsonType" : "timestamp"},
+                "customer_id": {"bsonType" : "string"}
+            }
+        }
+    }
+}

@@ -25,10 +25,6 @@ receipts_collection = QueryingDataBase(
     uri=db, db_name="cafeteria", collection_name="receipts"
 )
 
-# collection_tables = QueryingDataBase(db_cafeteria, collection_name="tables")
-# collection_menu = QueryingDataBase(db_cafeteria, collection_name="dishes")
-
-
 _say_name = "Please say your full name: "
 _say_phone = "Please say your phone number: "
 

@@ -134,12 +134,19 @@ if __name__ == "__main__":
     # #     unique_field_name="customer_phone", number=1, unique_bool=False
     # # )
 
-    customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
-    print(
-        db.define_schema_validation_rules(
-            schema_json=customer_config, db_name="cafeteria"
-        )
-    )
+    # customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
+    # print(
+    #     db.define_schema_validation_rules(
+    #         schema_json=customer_config, db_name="cafeteria"
+    #     )
+    # )
+
+    # tables_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/tables.json"
+    # print(
+    #     db.define_schema_validation_rules(
+    #         schema_json=tables_config, db_name="cafeteria"
+    #     )
+    # )
 
     # # schema.drop_collection()
     # schema.drop_database("animals")

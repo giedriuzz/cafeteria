@@ -35,14 +35,17 @@ class QueryingDataBase:
         except WriteError as e:
             return f"Not passed validation scheme one of fields! Error code: {e}"
 
-    def create_database_many_records(self, record: Dict[str, Any]) -> str:
+    def create_database_many_records(self, record: list) -> str:
         """Create many records from list of dictionaries
         dict_1 = {name:value, etc}
         dict_2 = {name:value, etc}
         function([dict_1, dict_2]) or function([{name:value, etc}, {name:value, etc}])
         """
-        result = self.collection.insert_many(record)
-        return str(result.inserted_ids)
+        try:
+            result = self.collection.insert_many(record)
+            return str(result.inserted_ids)
+        except WriteError as e:
+            return f"Not passed validation scheme one of fields! Error code: {e}"
 
     def find_one_document(self, field_name: str, value: str) -> Union[dict, None]:
         """Find document in collection
@@ -94,12 +97,15 @@ if __name__ == "__main__":
     collection_customer = QueryingDataBase(
         uri=db_uri, db_name="cafeteria", collection_name="customer"
     )
-
-    print(
-        collection_customer.create_database_one_record(
-            {"client_name": "client", "client_phone_number": "12345678912345"}
-        )
+    tables_collection = QueryingDataBase(
+        uri=db_uri, db_name="cafeteria", collection_name="tables"
     )
+
+    # print(
+    #     collection_customer.create_database_one_record(
+    #         {"client_name": "client", "client_phone_number": "12345678912345"}
+    #     )
+    # )
     # collection_customer.delete_document({"client_name": "client"})
     # print(collection_customer.find_documents(field_name="client_name", value="client"))
     # print(
@@ -130,23 +136,85 @@ if __name__ == "__main__":
     # customer = cafeteria.create_database_record(
     #     {"user_name": "Giedrius", "phone_number": "+37066768789"}
     # )
-    # tables = db .create_database_record(
-    #     {
-    #         "table_name": "Single",
-    #         "table_number": 1,
-    #         "reservation_time": "2023-06-06T00:00:00Z",
-    #         "customer_id": "647e12a39b1bc7aa861dc1fd",
-    #     }
-    # )
+
     # dishes = cafeteria.create_database_record(
     #     {
     #         "dish_category": "vegetable",
     #         "dish_name": "cepelinai su varške",
-    #         "dish_description": "cepeliniai is virtų bulvių su vargke",
+    #         "dish_description": "cepeliniai is virtų bulvių su varške",
     #         "dish_weight": 500,
     #         "preparation_time": 15,
     #         "dish_calories": 1034,
     #         "dish_price": 8.55,
     #         "customer_id": "647e12a39b1bc7aa861dc1fd",
     #     }
+    # )
+
+    # # --->> Create tables in collection "tables"
+    # table_1 = {
+    #     "table_name": "single",
+    #     "table_number": "1",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_2 = {
+    #     "table_name": "single",
+    #     "table_number": "2",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_3 = {
+    #     "table_name": "single",
+    #     "table_number": "3",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_4 = {
+    #     "table_name": "double",
+    #     "table_number": "4",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_5 = {
+    #     "table_name": "double",
+    #     "table_number": "5",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_6 = {
+    #     "table_name": "double",
+    #     "table_number": "6",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_7 = {
+    #     "table_name": "family",
+    #     "table_number": "7",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_8 = {
+    #     "table_name": "family",
+    #     "table_number": "8",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # table_9 = {
+    #     "table_name": "family",
+    #     "table_number": "9",
+    #     "reservation_time": 0,
+    #     "customer_id": "",
+    # }
+    # tables_collection.create_database_many_records(
+    #     [
+    #         table_1,
+    #         table_2,
+    #         table_3,
+    #         table_4,
+    #         table_5,
+    #         table_6,
+    #         table_7,
+    #         table_8,
+    #         table_9,
+    #     ]
     # )
