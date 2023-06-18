@@ -36,6 +36,14 @@ class QueryingDataBase:
         result = self.collection.insert_many(record)
         return str(result.inserted_ids)
 
+    def find_one_document(self, field_name: str, value: str) -> Union[dict, None]:
+        """Find document in collection
+        function(field_name='field_name', value='value') returns
+        list of dictionaries"""
+        query = {field_name: value}
+        document = self.collection.find_one(query)
+        return str(document)
+
     def find_documents(self, field_name: str, value: str) -> List[Dict]:
         query = {field_name: value}
         documents = self.collection.find(query)
