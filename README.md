@@ -19,5 +19,4 @@ a get receipt for services received.</br>
 
 How to run a program
 
-- file connect_to_rpi.py
-First, we need to declare some values.
+"will be soon"
