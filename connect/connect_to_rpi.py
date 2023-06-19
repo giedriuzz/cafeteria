@@ -115,7 +115,7 @@ if __name__ == "__main__":
     #     )
     # )
     # print(db.drop_database(db_name="exercise_db"))
-    # print(db.drop_collection(db_name="cafeteria", collection_name="customer"))
+    # print(db.drop_collection(db_name="cafeteria", collection_name="tables"))
     # print(
     #     db.create_unique_index(
     #         unique_field_name="name",
@@ -133,14 +133,14 @@ if __name__ == "__main__":
     # # schema.create_unique_index(
     # #     unique_field_name="customer_phone", number=1, unique_bool=False
     # # )
-
+    # * Customer validation rules
     # customer_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/customer.json"
     # print(
     #     db.define_schema_validation_rules(
     #         schema_json=customer_config, db_name="cafeteria"
     #     )
     # )
-
+    # * Tables validation rules
     # tables_config = "/home/giedrius/Documents/code_academy_projects/cafeteria/validation_schema/tables.json"
     # print(
     #     db.define_schema_validation_rules(

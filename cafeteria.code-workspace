@@ -10,6 +10,7 @@
 	"settings": {
 		"githubPullRequests.ignoredPullRequestBranches": [
 			"staging"
-		]
+		],
+		"powershell.cwd": "/home/giedrius/Documents/code_academy_projects/cafeteria"
 	}
 }

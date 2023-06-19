@@ -1,5 +1,7 @@
 # from pymongo.errors import ConnectionFailure, PyMongoError, ServerSelectionTimeoutError
 from typing import Union
+from dataclasses import dataclass
+from datetime import datetime, date
 from connect.connect_to_rpi import ConnectToMongoWithConfig
 from main import QueryingDataBase
 
@@ -25,20 +27,42 @@ receipts_collection = QueryingDataBase(
     uri=db, db_name="cafeteria", collection_name="receipts"
 )
 
+# Strings pool
 _say_name = "Please say your full name: "
 _say_phone = "Please say your phone number: "
+_say_reservation_day = "Please say preferred reservation day '2023-06-12':"
+_say_reservation_hour = "Please say preferred reservation hour '14':"
+_say_amount_of_persons = "Please say how many persons will be with you? "
 
 
-def input_customer_name_and_phone():
-    customer_name = input_only_string(_say_name)
-    customer_phone = input_only_number(_say_phone)
-    return customer_name, customer_phone
+@dataclass
+class ClientCredentials:
+    client_name: str
+    client_phone_number: str
+
+
+class Customer(ClientCredentials):
+    def __init__(self, client: ClientCredentials) -> None:
+        self.client = client
+
+    def get_customer_id_by_name(self) -> str:
+        customer = customer_collection.find_documents(
+            field_name=self.client.client_name, value=self.client.client_phone_number
+        )
+        customer_id = [i["_id"] for i in customer]
+        return str(customer_id[0])
+
+    def get_time_stamp(self, date_str: str, hour_str: str) -> float:
+        date_from_string = date_str + " " + hour_str
+        new_dt = datetime.fromisoformat(date_from_string)
+        return datetime.timestamp(new_dt)
 
 
 def input_only_number(string: str) -> Union[int, str]:
     while True:
         try:
-            integer = str(input(string))
+            integer = input(string)
+
             if integer.isdecimal() == True:
                 return int(integer)
             else:
@@ -61,6 +85,12 @@ def input_only_string(string: str) -> str:
             continue
 
 
+def input_customer_name_and_phone():
+    customer_name = input_only_string(_say_name)
+    customer_phone = input_only_number(_say_phone)
+    return customer_name, customer_phone
+
+
 def add_customer_to_db(user_name: str) -> bool:
     customer_phone = input_only_number(_say_phone)
     customer_collection.create_database_one_record(
@@ -69,31 +99,67 @@ def add_customer_to_db(user_name: str) -> bool:
     return True
 
 
-print("Welcome to our restaurant!", end="\n")
-while True:
-    reserved_before = input_only_string(
-        "Do you was reserved before ? NO\YES\nYou answer:"
-    )
-    if reserved_before.lower() == "yes" or reserved_before == "y":
-        name = input_only_string(_say_name)
-        find_customer = customer_collection.find_documents(
-            field_name="customer_name", value=name
-        )
-        if find_customer:
-            print(name)
-        else:
-            print("Sorry we couldn't find you in our restaurant list")
-            add_customer_to_db(name)
-        break
-    else:
-        # add_customer_to_db(name)
-        break
+# *     PROGRAM STARTING FROM HERE      !
 
-filtered = customer_collection.filter_fields(
-    fields={"customer_name": "Tadas Blinda"},
-    filters={"_id": 0},
+
+print("Welcome to our restaurant!", end="\n")
+client_name = input_only_string(_say_name)
+client_phone_number = str(input_only_number(_say_phone))
+clients = ClientCredentials(
+    client_name=client_name, client_phone_number=client_phone_number
 )
-print(filtered)
+customer = Customer(clients)
+
+while True:
+    client = customer_collection.find_one_document(
+        field_name="client_name", value=clients.client_name
+    )
+    if client is not None:
+        # [] function -> print the name, table number, reservation time
+        print("You are here!")
+    else:
+        # [x] ask reservation time, day, hour
+        # [x] ask how many persons will be
+        # [] function -> get customer id
+        # [] function -> search are free table
+        # [] function -> write customer in table
+        # [] function -> print the name, table number, reservation time
+        reservation_day = input_only_number(_say_reservation_day)
+        reservation_hour = input_only_number(_say_reservation_hour)
+        amount_of_persons = input_only_number(_say_amount_of_persons)
+        print(
+            customer.get_time_stamp(date_str=reservation_day, hour_str=reservation_hour)
+        )
+
+        print("You are not here!")
+
+
+# while True:
+#     reserved_before = input_only_string(
+#         "Do you was reserved before ? NO\YES\nYou answer:"
+#     )
+#     if reserved_before.lower() == "yes" or reserved_before == "y":
+#         name = input_only_string(_say_name)
+#         find_customer = customer_collection.find_documents(
+#             field_name="customer_name", value=name
+#         )
+#         if find_customer:
+#             print(name)
+#         else:
+#             print("Sorry we couldn't find you in our restaurant list")
+#             add_customer_to_db(name)
+#         break
+#     else:
+#         # add_customer_to_db(name)
+#         break
+
+# filtered = customer_collection.filter_fields(
+#     fields={"customer_name": "Tadas Blinda"},
+#     filters={"_id": 0},
+# )
+# print(filtered)
+
+
 # print(
 #     collection_customer.find_documents(field_name="customer_name", value=customer_name)
 # )

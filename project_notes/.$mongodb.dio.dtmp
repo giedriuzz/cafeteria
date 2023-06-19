@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-06-19T04:28:48.478Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.5.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" version="21.5.0" etag="O-4lGmSk_7hZg7becL9R" type="device" pages="3">
+<mxfile host="Electron" modified="2023-06-19T04:29:10.140Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.5.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" version="21.5.0" etag="vW5lbYiL7_i_wWVY5G8q" type="device" pages="3">
   <diagram id="La1SqYT-2nVoXK81vz49" name="db configuration">
     <mxGraphModel dx="592" dy="1027" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -643,13 +643,13 @@
         <mxCell id="vlsn9G4dyLAgXCneeeKq-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
           <mxGeometry y="74" width="310" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="vlsn9G4dyLAgXCneeeKq-4" value="+ search_in_db(cfient_name, client_phone_number):&amp;nbsp;" style="text;strokeColor=#2D7600;fillColor=#60a917;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=#ffffff;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
+        <mxCell id="vlsn9G4dyLAgXCneeeKq-4" value="+ search_in_db(cfient_name, client_phone_number):&amp;nbsp;" style="text;strokeColor=#6F0000;fillColor=#a20025;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=#ffffff;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
           <mxGeometry y="82" width="310" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="t3_Dx2WXM6q2PA-aOn83-2" value="+ ask_time(cfient_name, client_phone_number):&amp;nbsp;" style="text;strokeColor=#2D7600;fillColor=#60a917;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=#ffffff;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
+        <mxCell id="t3_Dx2WXM6q2PA-aOn83-2" value="+ ask_time(cfient_name, client_phone_number):&amp;nbsp;" style="text;strokeColor=#6F0000;fillColor=#a20025;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=#ffffff;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
           <mxGeometry y="120" width="310" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="vlsn9G4dyLAgXCneeeKq-5" value="+ check_a_free_table(cfient_name, client_phone_number):&amp;nbsp;" style="text;strokeColor=#2D7600;fillColor=#60a917;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=#ffffff;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
+        <mxCell id="vlsn9G4dyLAgXCneeeKq-5" value="+ check_a_free_table(cfient_name, client_phone_number):&amp;nbsp;" style="text;strokeColor=#6F0000;fillColor=#a20025;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontColor=#ffffff;" vertex="1" parent="vlsn9G4dyLAgXCneeeKq-1">
           <mxGeometry y="158" width="310" height="38" as="geometry" />
         </mxCell>
       </root>

@@ -101,9 +101,10 @@ if __name__ == "__main__":
         uri=db_uri, db_name="cafeteria", collection_name="tables"
     )
 
+    # * --->> Create client in customer database
     # print(
     #     collection_customer.create_database_one_record(
-    #         {"client_name": "client", "client_phone_number": "12345678912345"}
+    #         {"client_name": "client", "client_phone_number": "37061436412"}
     #     )
     # )
     # collection_customer.delete_document({"client_name": "client"})
@@ -130,12 +131,6 @@ if __name__ == "__main__":
     #         "customer_id": "blabla",
     #     }
     # )
-    # db_2 = cafeteria.create_database_record("")
-    # task = CafeteriaDataBase(db)
-    # print(task.find_documents(field_name="customer_name", value="customer"))
-    # customer = cafeteria.create_database_record(
-    #     {"user_name": "Giedrius", "phone_number": "+37066768789"}
-    # )
 
     # dishes = cafeteria.create_database_record(
     #     {
@@ -150,58 +145,67 @@ if __name__ == "__main__":
     #     }
     # )
 
-    # # --->> Create tables in collection "tables"
+    # * --->> Create tables in collection "tables"
     # table_1 = {
     #     "table_name": "single",
     #     "table_number": "1",
+    #     "amount_of_persons": 1,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_2 = {
     #     "table_name": "single",
     #     "table_number": "2",
+    #     "amount_of_persons": 1,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_3 = {
     #     "table_name": "single",
     #     "table_number": "3",
+    #     "amount_of_persons": 1,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_4 = {
     #     "table_name": "double",
     #     "table_number": "4",
+    #     "amount_of_persons": 2,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_5 = {
     #     "table_name": "double",
     #     "table_number": "5",
+    #     "amount_of_persons": 2,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_6 = {
     #     "table_name": "double",
     #     "table_number": "6",
+    #     "amount_of_persons": 2,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_7 = {
     #     "table_name": "family",
     #     "table_number": "7",
+    #     "amount_of_persons": 3,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_8 = {
     #     "table_name": "family",
     #     "table_number": "8",
+    #     "amount_of_persons": 3,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }
     # table_9 = {
     #     "table_name": "family",
     #     "table_number": "9",
+    #     "amount_of_persons": 3,
     #     "reservation_time": 0,
     #     "customer_id": "",
     # }

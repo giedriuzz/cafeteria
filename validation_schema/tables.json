@@ -6,7 +6,8 @@
             "required" : ["table_name", "table_number", "reservation_time", "customer_id"],
             "properties": {
                 "table_name": {"bsonType" : "string"},
-                "table_number": {"bsonType" : "int"},
+                "table_number": {"bsonType" : "string"},
+                "amount_of_persons": {"bsonType" : "int", "description" : "The number of people who can sit at the table"},
                 "reservation_time": {"bsonType" : "timestamp"},
                 "customer_id": {"bsonType" : "string"}
             }
