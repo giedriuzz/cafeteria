@@ -5,12 +5,19 @@
 		},
 		{
 			"path": "../Snipets"
+		},
+		{
+			"path": "../flask_introduction_ca"
 		}
 	],
 	"settings": {
 		"githubPullRequests.ignoredPullRequestBranches": [
 			"staging"
 		],
-		"powershell.cwd": "/home/giedrius/Documents/code_academy_projects/cafeteria"
+		"powershell.cwd": "/home/giedrius/Documents/code_academy_projects/cafeteria",
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter"
+		},
+		"python.formatting.provider": "none"
 	}
 }

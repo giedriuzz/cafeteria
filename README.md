@@ -19,4 +19,4 @@ a get receipt for services received.</br>
 
 How to run a program
 
-"will be soon"
+"will be soon..."
