@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../flask_introduction_ca"
+		},
+		{
+			"path": "../mongo_quering"
 		}
 	],
 	"settings": {

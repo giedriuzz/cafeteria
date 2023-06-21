@@ -69,10 +69,30 @@ class Validation:
                 print("Time format must to be like '14:00' !")
                 continue
 
-    def decrease_integer_to_three(self, number: int) -> int:
-        if number >= 3:
-            number = 3
-        return number
+    def less_then_seven(self, string: str) -> int | str:
+        while True:
+            try:
+                integer = input(string)
+
+                if integer.isdecimal() == True:
+                    length = len(integer)
+                    if length <= 7:
+                        return int(integer)
+                    else:
+                        raise ValueError
+                else:
+                    raise ValueError
+            except ValueError:
+                print(
+                    "! --- Wrong input, we can serve table only for 7 persons   --- !"
+                )
+                continue
+
+    def reduce_to_three(self, amount_of_persons: int) -> int:
+        if amount_of_persons > 3:
+            return 3
+        else:
+            return 3
 
 
 if __name__ == "__main__":

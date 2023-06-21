@@ -1,38 +1,10 @@
 # from pymongo.errors import ConnectionFailure, PyMongoError, ServerSelectionTimeoutError
-from typing import Union
+from typing import Iterable, Tuple, Union, List, Optional
 from dataclasses import dataclass
-from datetime import datetime, date
+from datetime import datetime
 from main import QueryingDataBase
 from connect.connect_to_rpi import ConnectToMongoWithConfig
 from validation.validation import Validation
-
-
-config_file = (
-    "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
-)
-validation = Validation()
-connection = ConnectToMongoWithConfig(config=config_file)
-db = connection.get_uri_link()
-
-customer_collection = QueryingDataBase(
-    uri=db, db_name="cafeteria", collection_name="customer"
-)
-tables_collection = QueryingDataBase(
-    uri=db, db_name="cafeteria", collection_name="tables"
-)
-meals_collection = QueryingDataBase(
-    uri=db, db_name="cafeteria", collection_name="meals"
-)
-receipts_collection = QueryingDataBase(
-    uri=db, db_name="cafeteria", collection_name="receipts"
-)
-
-# Strings pool
-_say_name = "Please say your full name: "
-_say_phone = "Please say your phone number: "
-_say_reservation_day = "Please say preferred reservation day like '2023-06-12':"
-_say_reservation_hour = "Please say preferred reservation hour like '14:00':"
-_say_amount_of_persons = "Please say how many persons will be with you? "
 
 
 @dataclass
@@ -70,14 +42,6 @@ class Tables:
     def get_table_number(self) -> int:
         return self.table[0]["table_number"]
 
-    def get_more_than_one_table(self, amount_of_persons: int):  # FIXME typing
-        if amount_of_persons > 7 and amount_of_persons <= 14:
-            additional_table = amount_of_persons - 7
-            return 1, additional_table
-        if amount_of_persons > 14:
-            additional_table = amount_of_persons - 14
-            return 2, additional_table
-
 
 def add_customer_to_db(user_name: str) -> bool:
     customer_phone = validation.input_only_number(_say_phone)
@@ -89,6 +53,32 @@ def add_customer_to_db(user_name: str) -> bool:
 
 # *     PROGRAM STARTING FROM HERE      !
 
+config_file = (
+    "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
+)
+validation = Validation()
+connection = ConnectToMongoWithConfig(config=config_file)
+db = connection.get_uri_link()
+
+customer_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="customer"
+)
+tables_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="tables"
+)
+meals_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="meals"
+)
+receipts_collection = QueryingDataBase(
+    uri=db, db_name="cafeteria", collection_name="receipts"
+)
+
+# Strings pool
+_say_name = "Please say your full name: "
+_say_phone = "Please say your phone number: "
+_say_reservation_day = "Please say preferred reservation day like '2023-06-12':"
+_say_reservation_hour = "Please say preferred reservation hour like '14:00':"
+_say_amount_of_persons = "Please say how many persons will be with you? "
 
 print("Welcome to our restaurant!", end="\n")
 client_name = validation.input_only_string(_say_name)
@@ -116,23 +106,29 @@ while True:
         # [] function -> print the name, table number, reservation time
         reservation_day = validation.input_only_date(_say_reservation_day)
         reservation_hour = validation.input_only_time(_say_reservation_hour)
-        amount_of_persons = validation.input_only_number(_say_amount_of_persons)
-
+        amount_of_persons = int(validation.less_then_seven(_say_amount_of_persons))
         time_stamp = customer.get_time_stamp(
             date_year=reservation_day, hours=reservation_hour
         )
+        reduce_to_three = validation.reduce_to_three(amount_of_persons)
         free_table_list = tables_collection.filter_by_greater_than_equal(
-            field_name="amount_of_persons", value=amount_of_persons
+            field_name="amount_of_persons", value=reduce_to_three
         )
+        table = Tables(free_table_list)
         if free_table_list is not None:
-            table = Tables(free_table_list)
+            customer_collection.create_database_one_record(
+                {
+                    "client_name": client_name,
+                    "client_phone_number": client_phone_number,
+                }
+            )
             get_table_number = table.get_table_number()
-            print(f"table number is : {get_table_number}")
-            break
+            get_customer_id = customer.get_customer_id_by_name()
+            print(get_customer_id)
         else:
-            print("Free table isnt empty")
+            # print("Free table isnt empty")
 
-        print()
+            print()
 
         print("You are not here!")
 
