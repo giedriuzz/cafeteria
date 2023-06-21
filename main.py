@@ -81,10 +81,10 @@ class QueryingDataBase:
         result = self.collection.delete_one(query)
         return result.deleted_count
 
-    def filter_fields(self, fields: dict, filters: dict) -> List[dict]:
-        db_fields = {**fields}
-        filter = {**filters}
-        result = self.collection.find(db_fields, filter)
+    def filter_by_greater_than_equal(self, field_name: str, value: int) -> List[dict]:
+        """$gte	It will match all the values that are greater than or equal to a specified value."""
+        query = {field_name: {"$gte": value}}
+        result = self.collection.find(query)
         return list(result)
 
 

@@ -2,15 +2,15 @@
 from typing import Union
 from dataclasses import dataclass
 from datetime import datetime, date
-from connect.connect_to_rpi import ConnectToMongoWithConfig
 from main import QueryingDataBase
-
-# from pymongo.operations import IndexModel
+from connect.connect_to_rpi import ConnectToMongoWithConfig
+from validation.validation import Validation
 
 
 config_file = (
     "/home/giedrius/Documents/code_academy_projects/cafeteria/connect/config.json"
 )
+validation = Validation()
 connection = ConnectToMongoWithConfig(config=config_file)
 db = connection.get_uri_link()
 
@@ -30,8 +30,8 @@ receipts_collection = QueryingDataBase(
 # Strings pool
 _say_name = "Please say your full name: "
 _say_phone = "Please say your phone number: "
-_say_reservation_day = "Please say preferred reservation day '2023-06-12':"
-_say_reservation_hour = "Please say preferred reservation hour '14':"
+_say_reservation_day = "Please say preferred reservation day like '2023-06-12':"
+_say_reservation_hour = "Please say preferred reservation hour like '14:00':"
 _say_amount_of_persons = "Please say how many persons will be with you? "
 
 
@@ -52,47 +52,35 @@ class Customer(ClientCredentials):
         customer_id = [i["_id"] for i in customer]
         return str(customer_id[0])
 
-    def get_time_stamp(self, date_str: str, hour_str: str) -> float:
-        date_from_string = date_str + " " + hour_str
-        new_dt = datetime.fromisoformat(date_from_string)
-        return datetime.timestamp(new_dt)
+    def get_time_stamp(self, date_year: datetime, hours: datetime) -> float:
+        joined_date = datetime(
+            year=date_year.year,
+            month=date_year.month,
+            day=date_year.day,
+            hour=hours.hour,
+            minute=hours.minute,
+        )
+        return datetime.timestamp(joined_date)
 
 
-def input_only_number(string: str) -> Union[int, str]:
-    while True:
-        try:
-            integer = input(string)
+class Tables:
+    def __init__(self, table: list[dict]) -> None:
+        self.table = table
 
-            if integer.isdecimal() == True:
-                return int(integer)
-            else:
-                raise ValueError
-        except ValueError:
-            print("! --- Wrong input, must to be a integer or float number --- !")
-            continue
+    def get_table_number(self) -> int:
+        return self.table[0]["table_number"]
 
-
-def input_only_string(string: str) -> str:
-    while True:
-        try:
-            strings = input(string)
-            if strings.replace(" ", "").isalpha() == True:
-                return strings
-            else:
-                raise ValueError
-        except ValueError:
-            print("! --- Wrong input, must be a string --- !")
-            continue
-
-
-def input_customer_name_and_phone():
-    customer_name = input_only_string(_say_name)
-    customer_phone = input_only_number(_say_phone)
-    return customer_name, customer_phone
+    def get_more_than_one_table(self, amount_of_persons: int):  # FIXME typing
+        if amount_of_persons > 7 and amount_of_persons <= 14:
+            additional_table = amount_of_persons - 7
+            return 1, additional_table
+        if amount_of_persons > 14:
+            additional_table = amount_of_persons - 14
+            return 2, additional_table
 
 
 def add_customer_to_db(user_name: str) -> bool:
-    customer_phone = input_only_number(_say_phone)
+    customer_phone = validation.input_only_number(_say_phone)
     customer_collection.create_database_one_record(
         {"customer_name": user_name, "customer_phone": customer_phone}
     )
@@ -103,8 +91,8 @@ def add_customer_to_db(user_name: str) -> bool:
 
 
 print("Welcome to our restaurant!", end="\n")
-client_name = input_only_string(_say_name)
-client_phone_number = str(input_only_number(_say_phone))
+client_name = validation.input_only_string(_say_name)
+client_phone_number = str(validation.input_only_phone_number(_say_phone))
 clients = ClientCredentials(
     client_name=client_name, client_phone_number=client_phone_number
 )
@@ -120,16 +108,31 @@ while True:
     else:
         # [x] ask reservation time, day, hour
         # [x] ask how many persons will be
+        # [x] function -> search are free table
+        # [] get table number
+        # [] function -> write customer to db
         # [] function -> get customer id
-        # [] function -> search are free table
         # [] function -> write customer in table
         # [] function -> print the name, table number, reservation time
-        reservation_day = input_only_number(_say_reservation_day)
-        reservation_hour = input_only_number(_say_reservation_hour)
-        amount_of_persons = input_only_number(_say_amount_of_persons)
-        print(
-            customer.get_time_stamp(date_str=reservation_day, hour_str=reservation_hour)
+        reservation_day = validation.input_only_date(_say_reservation_day)
+        reservation_hour = validation.input_only_time(_say_reservation_hour)
+        amount_of_persons = validation.input_only_number(_say_amount_of_persons)
+
+        time_stamp = customer.get_time_stamp(
+            date_year=reservation_day, hours=reservation_hour
         )
+        free_table_list = tables_collection.filter_by_greater_than_equal(
+            field_name="amount_of_persons", value=amount_of_persons
+        )
+        if free_table_list is not None:
+            table = Tables(free_table_list)
+            get_table_number = table.get_table_number()
+            print(f"table number is : {get_table_number}")
+            break
+        else:
+            print("Free table isnt empty")
+
+        print()
 
         print("You are not here!")
 
