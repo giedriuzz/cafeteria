@@ -50,9 +50,11 @@ class Validation:
     def input_only_date(self, string: str) -> datetime:
         while True:
             try:
+                date_now = datetime.now().strftime()
                 date_example = "%Y-%m-%d"
                 input_date = input(string)
                 date = datetime.strptime(input_date, date_example)
+
                 return date
             except ValueError:
                 print("Date format must to be like '2023-01-23' !")
@@ -62,12 +64,32 @@ class Validation:
         while True:
             try:
                 date_example = "%H:%M"
-                input_date = input(string)
-                date = datetime.strptime(input_date, date_example)
+                input_time = input(string)
+                date = datetime.strptime(input_time, date_example)
                 return date
             except ValueError:
                 print("Time format must to be like '14:00' !")
                 continue
+
+    def compare_timestamps(self, date: datetime, time: datetime):
+        while True:
+            try:
+                date_now = datetime.now()
+                date_now_timestamp = datetime.timestamp(date_now)
+                joined_datetime = datetime(
+                    year=date.year,
+                    month=date.month,
+                    day=date.day,
+                    hour=time.hour,
+                    minute=time.minute,
+                )
+                joined_datetime_timestamp = datetime.timestamp(joined_datetime)
+                if joined_datetime_timestamp >= date_now_timestamp:
+                    return joined_datetime_timestamp
+                else:
+                    raise ValueError
+            except ValueError:
+                print("Date must to be equal or greater than current time!")
 
     def less_then_seven(self, string: str) -> int | str:
         while True:
