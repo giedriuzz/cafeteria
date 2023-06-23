@@ -76,8 +76,8 @@ receipts_collection = QueryingDataBase(
 # Strings pool
 _say_name = "Please say your full name: "
 _say_phone = "Please say your phone number: "
-_say_reservation_day = "Please say preferred reservation day like '2023-06-12':"
-_say_reservation_hour = "Please say preferred reservation hour like '14:00':"
+_say_reservation_day = "Please say preferred reservation day like 'yyyy-mm-dd':"
+_say_reservation_hour = "Please say preferred reservation hour like 'hh:mm':"
 _say_amount_of_persons = "Please say how many persons will be with you? "
 
 print("Welcome to our restaurant!", end="\n")
@@ -104,12 +104,12 @@ while True:
         # [] function -> get customer id
         # [] function -> write customer in table
         # [] function -> print the name, table number, reservation time
-        reservation_day = validation.input_only_date(_say_reservation_day)
-        reservation_hour = validation.input_only_time(_say_reservation_hour)
-        amount_of_persons = int(validation.less_then_seven(_say_amount_of_persons))
-        time_stamp = customer.get_time_stamp(
-            date_year=reservation_day, hours=reservation_hour
+        reservation_day = validation.date_not_less_than_now(_say_reservation_day)
+        reservation_hour = validation.time_not_less_than_now(
+            _say_reservation_hour, reservation_day
         )
+        amount_of_persons = int(validation.less_then_seven(_say_amount_of_persons))
+
         reduce_to_three = validation.reduce_to_three(amount_of_persons)
         free_table_list = tables_collection.filter_by_greater_than_equal(
             field_name="amount_of_persons", value=reduce_to_three

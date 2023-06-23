@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Union, Optional
+from typing import Union
 
 
 class Validation:
@@ -50,14 +50,12 @@ class Validation:
     def input_only_date(self, string: str) -> datetime:
         while True:
             try:
-                date_now = datetime.now().strftime()
                 date_example = "%Y-%m-%d"
                 input_date = input(string)
                 date = datetime.strptime(input_date, date_example)
-
                 return date
             except ValueError:
-                print("Date format must to be like '2023-01-23' !")
+                print("Date format must to be like 'yyyy-mm-dd' !")
                 continue
 
     def input_only_time(self, string: str) -> datetime:
@@ -68,28 +66,52 @@ class Validation:
                 date = datetime.strptime(input_time, date_example)
                 return date
             except ValueError:
-                print("Time format must to be like '14:00' !")
+                print("Time format must to be like 'hh:mm' !")
                 continue
 
-    def compare_timestamps(self, date: datetime, time: datetime):
+    def time_not_less_than_now(self, string: str, date: datetime) -> datetime:
         while True:
             try:
-                date_now = datetime.now()
-                date_now_timestamp = datetime.timestamp(date_now)
-                joined_datetime = datetime(
+                time = self.input_only_time(string)
+                format_time = datetime.strftime(time, "%H:%M")
+                datetime_from_format_time = datetime.strptime(format_time, "%H:%M")
+                time_now = datetime.now().replace(second=0, microsecond=0)
+                time_adjusted = datetime(
                     year=date.year,
                     month=date.month,
                     day=date.day,
-                    hour=time.hour,
-                    minute=time.minute,
+                    hour=datetime_from_format_time.hour,
+                    minute=datetime_from_format_time.minute,
                 )
-                joined_datetime_timestamp = datetime.timestamp(joined_datetime)
-                if joined_datetime_timestamp >= date_now_timestamp:
-                    return joined_datetime_timestamp
-                else:
-                    raise ValueError
+                if time_adjusted >= time_now:
+                    return_datetime = datetime(
+                        year=time_adjusted.year,
+                        month=time_adjusted.month,
+                        day=time_adjusted.day,
+                        hour=time.hour,
+                        minute=time.minute,
+                    )
+                    return return_datetime
+                raise ValueError
             except ValueError:
-                print("Date must to be equal or greater than current time!")
+                print("Time must to be equal or greater than current time !")
+                continue
+
+    def date_not_less_than_now(self, string: str) -> datetime:
+        while True:
+            try:
+                date = self.input_only_date(string)
+                format_date = "%Y-%m-%d"
+                datetime_now_formatted = datetime.now().strftime(format_date)
+                datetime_from_formatted_date_now = datetime.strptime(
+                    datetime_now_formatted, format_date
+                ).replace(hour=0, minute=0, second=0)
+                if date >= datetime_from_formatted_date_now:
+                    return date
+                raise ValueError
+            except ValueError:
+                print("Date must to be equal or greater than current date !")
+                continue
 
     def less_then_seven(self, string: str) -> int | str:
         while True:
@@ -119,9 +141,3 @@ class Validation:
 
 if __name__ == "__main__":
     pass
-    # print(Validation().decrease_integer_to_three(123))
-
-    # def input_customer_name_and_phone(self):
-    #     customer_name = self.input_only_string(_say_name)
-    #     customer_phone = self.input_only_number(_say_phone)
-    #     return customer_name, customer_phone

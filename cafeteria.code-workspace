@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../mongo_quering"
+		},
+		{
+			"path": "../elevator_company"
 		}
 	],
 	"settings": {
